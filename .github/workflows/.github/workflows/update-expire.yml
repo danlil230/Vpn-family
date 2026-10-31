@@ -1,11 +1,31 @@
-- name: Generate strict 1-day rolling expiry for 2026
+name: Update Subscription Expiry
+
+on:
+  push:
+    branches: [ main, master ]
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Generate strict expiry
         run: |
-          # Вычисляем точное время ровно на 24 часа вперед от текущего момента
           EXPIRE_TIME=$(date -u -d "+1 day" +%s)
-          
-          # Записываем заголовки: лимит 30ГБ, интервал обновления 24 часа и суточный таймер
           cat << EOF > _headers
           /Full.yaml
             subscription-userinfo: upload=0; download=0; total=32212254720; expire=$EXPIRE_TIME
             profile-update-interval: 24
           EOF
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "GitHub Action Bot"
+          git config --global user.email "bot@github.com"
+          git add _headers
+          git commit -m "Auto-update subscription headers" || exit 0
+          git push
