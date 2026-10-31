@@ -1,24 +1,24 @@
-name: Auto Update Expiry Date
+name: Update Subscription Expiry
 
 on:
+  push:
+    branches: [ main ]
   schedule:
-    # Запускается каждый день в полночь по UTC
-    - cron: '0 0 * * *'
-  workflow_dispatch:
+    - cron: '0 0 * * *' # Обновление каждый день в полночь
 
 jobs:
   update:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Generate next day expiry
+      - name: Generate headers with 30GB limit and rolling expiry
         run: |
-          # Вычисляем timestamp для даты через 2 дня от текущего момента
-          EXPIRE_TIME=$(date -u -d "+2 days" +%s)
+          # Вычисляем дату истечения на 30 дней вперед в рамках текущего года
+          EXPIRE_TIME=$(date -u -d "+30 days" +%s)
           
-          # Перезаписываем файл _headers свежим таймером и лимитом в 30 ГБ
+          # Записываем актуальные данные в файл _headers для Cloudflare Pages
           cat << EOF > _headers
           /Full.yaml
             subscription-userinfo: upload=0; download=0; total=32212254720; expire=$EXPIRE_TIME
@@ -27,8 +27,8 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git config --global user.name "Auto Expiry Bot"
-          git config --global user.email "bot@users.noreply.github.com"
+          git config --global user.name "GitHub Action Bot"
+          git config --global user.email "bot@github.com"
           git add _headers
-          git commit -m "Auto-update subscription expiry timer [skip ci]" || exit 0
+          git commit -m "Auto-update subscription headers and traffic limits" || exit 0
           git push
