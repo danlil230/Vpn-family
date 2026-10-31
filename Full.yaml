@@ -1,8 +1,8 @@
 # Profile-Title: Семейный VPN
-# subscription-userinfo: upload=0; download=0; total=2199023255552; expire=0
+# subscription-userinfo: upload=0; download=0; total=6199023255552; expire=0
 # support-url: https://t.me/+c-jXwsei3IRlYjgy
 # profile-web-page-url: https://danlil230.github.io/phenix-cloud-os/
-# announce: Подписка на модерации😎!Нажми кнопку 👈,что перейти на сайт,и 👉 что бы в телеграм.Нажимай 🔁,или включи авто обновление!
+# announce: Подписка на модерации😎!Нажми кнопку 👈,что перейти на сайт,и 👆что бы в телеграм.Нажимай 🔁,или включи авто обновление!
 vless://d5b3e363-4143-435f-80d3-a5156883a22@193.233.88.34:8443?flow=xtls-rx-vision&type=tcp&securifp=firefox&sni=de7-site.kartamira.cc&pbk=SbK0sIlbwg4akyBg5mL5KeEE7YnRc&sid=6ba85179e30d4fc2#VLESS Конвиги🤗🚀👇
 vless://d5b3e363-4143-435f-80d3-a51568283a22@193.233.88.34:8443?flow=xtls-rprx-vision&type=tcp&security=reality&fp=firefox&sni=de7-site.kartamira.cc&pbk=SbVKOEMjK0sIlbwg4akyBg5mL5KZwwB-ed4eEE7YnRc&sid=6ba85179e30d4fc2#🇩🇪Германия-не для тяжёлого🤗
 vless://6da2c981-8c77-4340-bda3-93399b7aea26@shorts.blog-forme.ru:443?mode=auto&path=%2Fv2%2Fsync%2Faf2c0c&security=reality&encryption=none&pbk=nalACuCZjV1sZx7QOH6yAIDio8mFI0FgVKYQvQHBKS4&fp=edge&type=xhttp&sni=shorts.blog-forme.ru&sid=fb3a5f2d4ca346ed#🇳🇱Нидерланды🚀для🗄️телеграма 
@@ -11,7 +11,7 @@ ss://YWVzLTI1Ni1nY206WlJwZ2FCZUd4dEVOSVhndmhwa1pCS3o5R25XUlMyZFljeDlPK2EyaXdOND0
 ss://YWVzLTI1Ni1nY206WlJwZ2FCZUd4dEVOSVhndmhwa1pCS3o5R25XUlMyZFljeDlPK2EyaXdOND0%3D@202.50.253.99:19999?type=tcp#🇮🇹Италия-Самый быстрый🚀
 ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTprMWRCT21PQjRvcWk3VW1wMzdhMWJR@82.38.31.212:8080?type=tcp#🇳🇱Нидерланды-Для YouTube 🚀
 hysteria2://6da2c981-8c77-4340-bda3-93399b7aea26@video.blog-forme.ru:443?alpn=h3&sni=video.blog-forme.ru#🇳🇱Нидерланды-От РКН 🚀
-hysteria2://a35c508f-4d5d-4531-842e-6e9d43c762c0@bl1.nexfile.net:4444?alpn=h3&sni=bl1.nexfile.net#Беларусь-От РКН 🚀
+hysteria2://a35c508f-4d5d-4531-842e-6e9d43c762c0@bl1.nexfile.net:4444?alpn=h3&sni=bl1.nexfile.net#🇧🇾Беларусь-От РКН 🚀
 route:
   auto_detect_interface: true
   override_original_dns: false
