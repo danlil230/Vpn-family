@@ -2,13 +2,7 @@
 # support-url: https://t.me/+c-jXwsei3IRlYjgy
 # profile-web-page-url: https://danlil230.github.io/phenix-cloud-os/
 # announce: Подписка на модерации😎!Нажми кнопку 👈,что перейти на сайт,и 👆что бы в телеграм.Нажимай 🔁,или включи авто обновление!
-proxies:
-  - name: 🇪🇺 Авто - Самый быстрый
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    tolerance: 50
-    # Здесь клиент сам будет собирать все твои доступные ноды или можно перечислить их через proxies:
+
 vless://d5b3e363-4143-435f-80d3-a51568283a22@193.233.88.34:8443?flow=xtls-rprx-vision&type=tcp&security=reality&fp=firefox&sni=de7-site.kartamira.cc&pbk=SbVKOEMjK0sIlbwg4akyBg5mL5KZwwB-ed4eEE7YnRc&sid=6ba85179e30d4fc2#🇩🇪Германия-не для тяжёлого🤗
 vless://6da2c981-8c77-4340-bda3-93399b7aea26@shorts.blog-forme.ru:443?mode=auto&path=%2Fv2%2Fsync%2Faf2c0c&security=reality&encryption=none&pbk=nalACuCZjV1sZx7QOH6yAIDio8mFI0FgVKYQvQHBKS4&fp=edge&type=xhttp&sni=shorts.blog-forme.ru&sid=fb3a5f2d4ca346ed#🇳🇱Нидерланды🚀для🗄️телеграма 
 ss://Y2hhAtaWV0Zi1wb2xprMWRCT21PQjRvcWk3VzdhMWJR@82.382:8080?type=tcp#SS Конфиги🤗🚀👇
