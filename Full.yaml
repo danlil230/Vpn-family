@@ -9,3 +9,32 @@ ss://YWVzLTI1Ni1nY206WlJwZ2FCZUd4dEVOSVhndmhwa1pCS3o5R25XUlMyZFljeDlPK2EyaXdOND0
 ss://YWVzLTI1Ni1nY206WlJwZ2FCZUd4dEVOSVhndmhwa1pCS3o5R25XUlMyZFljeDlPK2EyaXdOND0%3D@202.50.253.99:19999?type=tcp#🇮🇹Италия-Самый быстрый🚀
 ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTprMWRCT21PQjRvcWk3VW1wMzdhMWJR@82.38.31.212:8080?type=tcp#🇳🇱Нидерланды-Для YouTube 🚀
 hysteria2://6da2c981-8c77-4340-bda3-93399b7aea26@video.blog-forme.ru:443?alpn=h3&sni=video.blog-forme.ru#🇳🇱Нидерланды-От РКН 🚀
+
+route:
+  auto_detect_interface: true
+  override_original_dns: false
+  geoip:
+    download_url: https://github.com/v2fly/geoip/releases/latest/download/geoip.dat
+    download_detour: direct
+  geosite:
+    download_url: https://github.com/v2fly/geosite/releases/latest/download/geosite.dat
+    download_detour: direct
+  rules:
+    - ip_is_private: true
+      outbound: direct
+    - geosite: category-ads-all
+      outbound: block
+    - geosite: cn
+      outbound: direct
+    - domain_suffix:
+        - .ru
+        - .su
+        - .рф
+      outbound: direct
+    - geosite: russia
+      outbound: direct
+    - ip_cidr:
+        - 10.0.0.0/8
+        - 172.16.0.0/12
+        - 192.168.0.0/16
+      outbound: direct
