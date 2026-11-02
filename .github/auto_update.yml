@@ -1,1 +1,33 @@
+name: Auto Update VPN Traffic
 
+on:
+  schedule:
+    # Запуск робота на серверах GitHub каждые 30 минут круглые сутки
+    - cron: '*/30 * * * *'
+  workflow_dispatch: # Добавляет кнопку для ручного запуска в интерфейсе сайта
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Скачиваем репозиторий
+      uses: actions/checkout@v3
+
+    - name: Включаем Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Ставим библиотеку для запросов
+      run: pip install requests
+
+    - name: Запускаем наш скрипт обновления
+      run: python update_traffic.py
+
+    - name: Сохраняем изменения обратно в репозиторий (Commit и Push)
+      run: |
+        git config --local user.email "actions@github.com"
+        git config --local user.name "GitHub Actions"
+        git add .
+        git diff --quiet && git diff --staged --quiet || git commit -m "Автоматическое обеспечение трафика подписки"
+        git push
