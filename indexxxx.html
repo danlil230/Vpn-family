@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark" data-neon="blue">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeVPN — Свободный доступ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Библиотека для генерации QR-кодов -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        /* Тема: Тёмная (Синий неон по умолчанию) */
+        :root[data-theme="dark"][data-neon="blue"] {
+            --bg-color: #070913;
+            --card-bg: #0d1224;
+            --primary-neon: #00f0ff;
+            --secondary-neon: #b000ff;
+            --text-main: #ffffff;
+            --text-muted: #8a99ad;
+            --border: rgba(0, 240, 255, 0.2);
+            --glow: 0 0 15px rgba(0, 240, 255, 0.4);
+            --gradient: linear-gradient(135deg, #00f0ff, #b000ff);
+            --grid-color: rgba(0, 240, 255, 0.03);
+        }
+
+        /* Тёмная: Оранжевый неон */
+        :root[data-theme="dark"][data-neon="orange"] {
+            --bg-color: #120907;
+            --card-bg: #24120d;
+            --primary-neon: #ff6600;
+            --secondary-neon: #ffcc00;
+            --text-main: #ffffff;
+            --text-muted: #ad918a;
+            --border: rgba(255, 102, 0, 0.2);
+            --glow: 0 0 15px rgba(255, 102, 0, 0.4);
+            --gradient: linear-gradient(135deg, #ff6600, #ffcc00);
+            --grid-color: rgba(255, 102, 0, 0.03);
+        }
+
+        /* Тёмная: Радужный неон */
+        :root[data-theme="dark"][data-neon="rainbow"] {
+            --bg-color: #0b0713;
+            --card-bg: #150d24;
+            --primary-neon: #ff007f;
+            --secondary-neon: #00f0ff;
+            --text-main: #ffffff;
+            --text-muted: #9c8aad;
+            --border: rgba(255, 0, 127, 0.2);
+            --glow: 0 0 15px rgba(255, 0, 127, 0.4);
+            --gradient: linear-gradient(135deg, #ff007f, #b000ff, #00f0ff);
+            --grid-color: rgba(255, 0, 127, 0.03);
+        }
+
+        /* Тема: Белая / Светлая с радужными акцентами */
+        :root[data-theme="light"] {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --primary-neon: #6366f1;
+            --secondary-neon: #ec4899;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border: rgba(99, 102, 241, 0.2);
+            --glow: 0 4px 20px rgba(99, 102, 241, 0.15);
+            --gradient: linear-gradient(135deg, #6366f1, #ec4899, #06b6d4);
+            --grid-color: rgba(99, 102, 241, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px 20px 110px 20px;
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 20px 40px 20px;
+        }
+
+        /* Верхняя панель */
+        .top-bar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .top-switcher-bar {
+            display: flex;
+            gap: 10px;
+        }
+
+        .switch-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--glow);
+        }
+
+        .switch-btn:hover {
+            border-color: var(--primary-neon);
+        }
+
+        .theme-tip {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-align: center;
+            max-width: 320px;
+        }
+
+        /* Интерактивный статус-бар сети (Светофор) */
+        .network-status-bar {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 10px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--glow);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00ff66;
+            box-shadow: 0 0 10px #00ff66;
+            animation: pulseDot 2s infinite;
+        }
+
+        @keyframes pulseDot {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--card-bg);
+            color: var(--primary-neon);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--glow);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+        }
+
+        h1 span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Система вкладок */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .tab-content.active-tab {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient);
+        }
+
+        .card h2 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-main);
+        }
+
+        .cat-icon {
+            font-size: 1.6rem;
+            filter: drop-shadow(0 0 8px var(--primary-neon));
+        }
+
+        /* Блок Update */
+        .update-banner {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(176, 0, 255, 0.1));
+            border: 1px solid var(--primary-neon);
+            border-radius: 16px;
+            padding: 20px 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--glow);
+        }
+
+        .update-banner h3 {
+            color: var(--primary-neon);
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .update-banner p {
+            color: var(--text-main);
+            font-size: 0.98rem;
+            line-height: 1.5;
+        }
+
+        /* Карточки серверов */
+        .servers-table {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .server-card-detailed {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .server-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .server-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .server-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .status-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            height: 22px;
+        }
+
+        .bar {
+            width: 5px;
+            border-radius: 2px;
+        }
+
+        .bar-1 { height: 8px; }
+        .bar-2 { height: 14px; }
+        .bar-3 { height: 22px; }
+
+        .status-green .bar { background: #00ff66; box-shadow: 0 0 8px rgba(0, 255, 102, 0.5); }
+        .status-yellow .bar { background: #ffcc00; box-shadow: 0 0 8px rgba(255, 204, 0, 0.5); }
+
+        .status-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            color: #00ff66;
+            background: rgba(0, 255, 102, 0.1);
+        }
+
+        .status-text-yellow {
+            color: #ffcc00;
+            background: rgba(255, 204, 0, 0.1);
+        }
+
+        .live-ping {
+            font-size: 0.78rem;
+            font-family: 'Fira Code', monospace;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        .btn-mini {
+            background: var(--card-bg);
+            border: 1px solid var(--primary-neon);
+            color: var(--primary-neon);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--glow);
+        }
+
+        .btn-mini:hover {
+            background: var(--primary-neon);
+            color: var(--bg-color);
+        }
+
+        .speedtest-results {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+
+        .speedtest-results strong {
+            color: var(--text-main);
+        }
+
+        .qr-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        #qrcode {
+            background: #ffffff;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        /* FAQ (Support) */
+        .faq-item {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .faq-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .faq-item h4 {
+            color: var(--primary-neon);
+            font-size: 1.08rem;
+            margin-bottom: 6px;
+        }
+
+        .faq-item p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .steps-list {
+            list-style: none;
+            counter-reset: step;
+        }
+
+        .steps-list li {
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 15px;
+            color: var(--text-muted);
+        }
+
+        .steps-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .steps-list li::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 34px;
+            height: 34px;
+            background: var(--card-bg);
+            color: var(--primary-neon);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            box-shadow: var(--glow);
+        }
+
+        .steps-list li strong {
+            color: var(--text-main);
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .btn-neon-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--gradient);
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.05rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--glow);
+        }
+
+        .btn-neon-primary:hover {
+            transform: translateY(-2px);
+            opacity: 0.95;
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 4px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 12px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-neon);
+            box-shadow: var(--glow);
+        }
+
+        .btn-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: normal;
+        }
+
+        /* Плавающее нижнее меню-овальчик со скользящим паровозом */
+        .bottom-nav-dock {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 6px;
+            border-radius: 40px;
+            display: flex;
+            gap: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .dock-pill {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            position: relative;
+            z-index: 2;
+            transition: color 0.3s ease;
+        }
+
+        .dock-pill.active {
+            color: #fff;
+        }
+
+        .dock-slider {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            height: calc(100% - 12px);
+            background: var(--gradient);
+            border-radius: 30px;
+            box-shadow: var(--glow);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+        }
+
+        .grid-tiles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .tile {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+        }
+
+        .tile h3 {
+            font-size: 1.15rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary-neon);
+        }
+
+        .tile p {
+            color: var(--text-muted);
+            font-size: 0.93rem;
+        }
+
+        /* Пасхалочный кошачий мем */
+        .cat-easter-egg {
+            text-align: center;
+            margin: 25px 0;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .cat-bubble {
+            display: inline-block;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--primary-neon);
+            box-shadow: var(--glow);
+            margin-bottom: 8px;
+        }
+
+        .paws-decor {
+            text-align: center;
+            font-size: 1.5rem;
+            letter-spacing: 12px;
+            margin: 30px 0;
+            opacity: 0.6;
+            filter: drop-shadow(0 0 5px var(--primary-neon));
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.1rem; }
+            .card { padding: 20px; }
+            .dock-pill { padding: 6px 8px; font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Верхняя панель: Переключение тем и подсказка -->
+        <div class="top-bar">
+            <div class="top-switcher-bar">
+                <button class="switch-btn" id="themeToggleBtn" onclick="toggleTheme()">🌙 Тёмный (Синий)</button>
+                <button class="switch-btn" onclick="setLightMode()">☀️ Белый</button>
+            </div>
+            <div class="theme-tip">(P.S. Внимание, кнопка тёмный режим изменяется, потыкай на неё два раза, и цвет поменяется. Тыкай, и цвет будет меняться. Всего три цвета: синий, радужный и оранжевый неон)</div>
+        </div>
+
+        <!-- Интерактивный статус-бар сети (Светофор) -->
+        <div class="network-status-bar">
+            <div class="status-indicator">
+                <div class="status-dot" id="statusDot"></div>
+                <span id="statusText">Статус системы: Все серверы в норме и летают 🚀</span>
+            </div>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Live</span>
+        </div>
+
+        <header>
+            <div class="logo-badge">
+                <span>🐱</span> Бывший CatVPN — Теперь CODE <span>⚡</span>
+            </div>
+            <h1><span>CodeVPN</span> Project</h1>
+            <p class="subtitle">Свободный, быстрый и неубиваемый доступ в сеть</p>
+        </header>
+
+        <!-- ================= ВКЛАДКА 1: ГЛАВНАЯ ================= -->
+        <div id="tab-main" class="tab-content active-tab">
+            <div class="card">
+                <h2><span class="cat-icon">🐱</span> О проекте CodeVPN</h2>
+                <p style="color: var(--text-muted); margin-bottom: 15px;">
+                    Это персональный, свободный и неубиваемый проект для обхода блокировок. Никаких рекламок и подписок за деньги — только чистый софт с GitHub и максимальная скорость.
+                </p>
+                <div class="steps-list">
+                    <li><strong>Выбери софт:</strong> Скачай проверенный клиент во вкладке «Софт».</li>
+                    <li><strong>Забери ключи:</strong> Во вкладке «Серверы» скопируй общую подписку или отдельные ключи.</li>
+                    <li><strong>Следи за новостями:</strong> Все свежие сводки и апдейты читай в разделе «Обновления». 🚀</li>
+                </div>
+            </div>
+
+            <!-- Ироничные плитки -->
+            <div class="grid-tiles">
+                <div class="tile">
+                    <h3>🛡️ Безопасность</h3>
+                    <p>Ничего не перехватывается. Честный GitHub-софт, данные не улетают сторонним лицам на сервера.</p>
+                </div>
+                <div class="tile">
+                    <h3>🚀 Надежность</h3>
+                    <p>Сервера не умирают — один сдох, арендовали второй. Третий сдох — подняли четвёртый! Платные подписки нервно курят в сторонке.</p>
+                </div>
+            </div>
+
+            <!-- Интерактивная пасхалка с котами -->
+            <div class="cat-easter-egg" onclick="triggerCatQuote()">
+                <div class="cat-bubble" id="catQuoteBubble">🐾 Нажми на кота, чтобы услышать мудрость Феника и Рыськи!</div>
+                <div style="font-size: 2rem;">🐱🐈</div>
+            </div>
+
+            <div class="paws-decor">🐾 🐾 🐾 🐾 🐾</div>
+        </div>
+
+        <!-- ================= ВКЛАДКА 2: ОБНОВЛЕНИЯ ================= -->
+        <div id="tab-updates" class="tab-content">
+            <div class="card">
+                <h2><span class="cat-icon">🚀</span> Обновления и Telegram-сводки</h2>
+                <p style="color: var(--text-muted); margin-bottom: 20px;">Здесь публикуются все текстовые новости проекта и посты из канала.</p>
+                
+                <div class="update-banner" style="margin-bottom: 0;">
+                    <h3>🚀 Update 1.0</h3>
+                    <p>Ура!! 🥳 Конфигурации починены!! Чикаго и Сингапур рабочие, ложные тайм-ауты! Hysteria 2 вернули, подключайся к новым локациям.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ВКЛАДКА 3: СЕРВЕРЫ ================= -->
+        <div id="tab-servers" class="tab-content">
+            <div class="card">
+                <h2><span class="cat-icon">📊</span> Статистика серверов и тесты</h2>
+                <p style="color: var(--text-muted); margin-bottom: 15px;">
+                    💡 <em>TCP-пинг в клиенте никогда точно не скажет, рабочий сервер или нет. Тайм-ауты — это ложь! Скорость и работоспособность проверяем через Speedtest и YouTube. Если что-то сломалось, через час после обновления подписки всё снова заработает.</em>
+                </p>
+                
+                <div class="servers-table">
+                    <!-- Сингапур -->
+                    <div class="server-card-detailed status-green">
+                        <div class="server-header-row">
+                            <div class="server-left">
+                                <span>🇸🇬 Сингапур (Hysteria 2)</span>
+                            </div>
+                            <div class="server-right">
+                                <span class="live-ping" id="ping-sg">Пинг: тест...</span>
+                                <div class="status-bars">
+                                    <div class="bar bar-1"></div>
+                                    <div class="bar bar-2"></div>
+                                    <div class="bar bar-3"></div>
+                                </div>
+                                <span class="status-text">Работает (Max)</span>
+                                <button class="btn-mini" onclick="copyKey('hysteria2://4fa0ca1b-0742-419d-8fd2-3f698e06b206@84.32.23.76:20443?sni=hy530899.w-mebel.pro#🇸🇬 Сингапур😻🚀🚀')">📋 Ключ</button>
+                            </div>
+                        </div>
+                        <div class="speedtest-results">
+                            📈 <strong>Результат Speedtest:</strong> Скачать: <strong>90.5 Mbps</strong> | Загрузить: <strong>82.4 Mbps</strong> (Пинг: 247 ms)[span_0](start_span)[span_0](end_span)
+                        </div>
+                    </div>
+
+                    <!-- Чикаго -->
+                    <div class="server-card-detailed status-green">
+                        <div class="server-header-row">
+                            <div class="server-left">
+                                <span>🇯🇵 Чикаго (Hysteria 2)</span>
+                            </div>
+                            <div class="server-right">
+                                <span class="live-ping" id="ping-ch">Пинг: тест...</span>
+                                <div class="status-bars">
+                                    <div class="bar bar-1"></div>
+                                    <div class="bar bar-2"></div>
+                                    <div class="bar bar-3"></div>
+                                </div>
+                                <span class="status-text">Работает (Max)</span>
+                                <button class="btn-mini" onclick="copyKey('hysteria2://4fa0ca1b-0742-419d-8fd2-3f698e06b206@88.216.57.197:20443?sni=hy51290d.w-mebel.pro#🇯🇵Чикаго😻🚀🚀')">📋 Ключ</button>
+                            </div>
+                        </div>
+                        <div class="speedtest-results">
+                            📈 <strong>Результат Speedtest:</strong> Скачать: <strong>87.9 Mbps</strong> | Загрузить: <strong>83.1 Mbps</strong> (Пинг: 144 ms)[span_1](start_span)[span_1](end_span)
+                        </div>
+                    </div>
+
+                    <!-- Польша -->
+                    <div class="server-card-detailed status-yellow">
+                        <div class="server-header-row">
+                            <div class="server-left">
+                                <span>🇵🇱 Польша-Httpp (VLESS) ‼️ (если не работает, попробуй понатыкать кучу раз, сервер должен ожить)</span>
+                            </div>
+                            <div class="server-right">
+                                <span class="live-ping" id="ping-pl">Пинг: тест...</span>
+                                <div class="status-bars">
+                                    <div class="bar bar-1"></div>
+                                    <div class="bar bar-2"></div>
+                                    <div class="bar bar-3" style="background: #ffcc00;"></div>
+                                </div>
+                                <span class="status-text status-text-yellow">Проверяй</span>
+                                <button class="btn-mini" onclick="copyKey('vless://92b79c22-f68b-4713-8b21-52f264cb92f5@pl.song69.fun:8444?type=xhttp&security=reality&fp=firefox&sni=pl1.song69.fun&pbk=NfjMIX4n7y4JjlX1v2G69ReU_iUm8dNkKJdJvEtXwDY&sid=f473bdddee26cfc6&path=/api/443/download/&mode=packet-up&extra={#🇵🇱Польша- Httpp')">📋 Ключ</button>
+                            </div>
+                        </div>
+                        <div class="speedtest-results">
+                            📈 <strong>Статус:</strong> Узел настраивается через поиск провайдера и сервера Speedtest. Потыкай пару раз для стабильного коннекта!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-container" style="margin-top: 25px;">
+                    <button class="btn-neon-primary" onclick="copyYamlLink()">
+                        📋 Скопировать всю подписку (YAML)
+                    </button>
+                </div>
+
+                <!-- Генератор QR-кода для камеры телефона -->
+                <div class="qr-section">
+                    <p style="font-size: 0.95rem; font-weight: 600;">📷 QR-код подписки для быстрого сканирования:</p>
+                    <div id="qrcode"></div>
+                    <span style="font-size: 0.78rem; color: var(--text-muted);">Наведи камеру телефона с клиентом для мгновенного добавления</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><span class="cat-icon">📱</span> Как подключить за 1 клик</h2>
+                <ol class="steps-list">
+                    <li>Скопируй ссылку на подписку или отдельный ключ сервера кнопкой выше.</li>
+                    <li>Зайди в клиент (INCY или Happ), открой вкладку серверов или подписок.</li>
+                    <li>Нажми «Добавить из буфера» / плюсик — и всё мгновенно заработает!</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- ================= ВКЛАДКА 4: SUPPORT ================= -->
+        <div id="tab-support" class="tab-content">
+            <div class="card">
+                <h2><span class="cat-icon">❓</span> Support / Частые вопросы</h2>
+                
+                <div class="faq-item">
+                    <h4>Подписка безлимитная?</h4>
+                    <p>Да, безлимитная! Никаких скрытых ограничений по трафику.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h4>Что делать, если серваки упали?</h4>
+                    <p>Сервера могут умереть, но мы их мгновенно восстанавливаем и обновляем конфигурации в боте.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Почему в клиенте горит тайм-аут (n/a)?</h4>
+                    <p>Не верь слепо TCP-пингу. Если узлы только что добавлены, клиент может показывать тайм-аут, но реальную работоспособность всегда подтверждают Speedtest и YouTube.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Как правильно обновить подписку в клиенте?</h4>
+                    <p>Зайди в приложение (INCY или Happ), нажми обновление подписки или добавь скопированную ссылку заново через буфер обмена (если подписка сломалась, обычно помогает обновить её пару раз в течение часа).</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Безопасно ли использовать этот проект?</h4>
+                    <p>Абсолютно. Никакие данные не улетают сторонним лицам — это полностью честный open-source софт с GitHub.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ВКЛАДКА 5: СОФТ ================= -->
+        <div id="tab-apps" class="tab-content">
+            <div class="card">
+                <h2><span class="cat-icon">🐱</span> Официальные клиенты (GitHub)</h2>
+                <p style="color: var(--text-muted); margin-bottom: 20px;">Из плеймаркетов почти всё повырезали, качаем напрямую из надежных источников:</p>
+                <div class="btn-container">
+                    <a href="https://github.com/MatsuriDayo/NekoBoxForAndroid/releases" class="btn-secondary" target="_blank">
+                        🤖 NekoBox (Android)
+                        <span class="btn-desc">Проверенный классический комбайн</span>
+                    </a>
+                    <a href="https://github.com/2dust/v2rayN/releases" class="btn-secondary" target="_blank">
+                        💻 v2rayN (Windows)
+                        <span class="btn-desc">⚠️ Внимание: репозиторий на китайском, врубай переводчик!</span>
+                    </a>
+                    <a href="https://github.com/MetaCubeX/ClashVergeRev/releases" class="btn-secondary" target="_blank">
+                        🪟 Clash Verge (PC/Mac)
+                        <span class="btn-desc">Удобный графический клиент</span>
+                    </a>
+                    <a href="https://github.com/happ-proxy/happ-android/releases" class="btn-secondary" target="_blank">
+                        📱 Happ (iOS/Android)
+                        <span class="btn-desc">Рабочая ссылка на пре-релизы</span>
+                    </a>
+                    <a href="https://github.com/INCY-DEV/incy-platforms" class="btn-secondary" target="_blank">
+                        🟢 INCY (Android / Multiplatform)
+                        <span class="btn-desc">🟢 Удобный зелёный клиент</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Зеркала бэкапов на случай проблем с GitHub -->
+            <div class="card">
+                <h2><span class="cat-icon">🛟</span> Резервные зеркала (Бэкапы)</h2>
+                <p style="color: var(--text-muted); margin-bottom: 15px;">Если вдруг основной GitHub будет недоступен, используй прямые официальные релизы:</p>
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
+                    <li><a href="https://github.com/happ-proxy/happ-android/releases" target="_blank" style="color: var(--primary-neon); text-decoration: none;">🔗 Зеркало Happ APK (GitHub Releases)</a></li>
+                    <li><a href="https://github.com/MatsuriDayo/NekoBoxForAndroid/releases" target="_blank" style="color: var(--primary-neon); text-decoration: none;">🔗 Зеркало NekoBox APK (GitHub Releases)</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 CodeVPN Project. Создано с кошачьей иронией 🐾</p>
+        </footer>
+    </div>
+
+    <!-- Плавающее нижнее меню-овальчик со скользящим паровозом -->
+    <div class="bottom-nav-dock" id="bottomDock">
+        <div class="dock-slider" id="dockSlider"></div>
+        <button class="dock-pill active" onclick="switchTab('main', this)">🏠 Главная</button>
+        <button class="dock-pill" onclick="switchTab('updates', this)">🚀 Обновления</button>
+        <button class="dock-pill" onclick="switchTab('servers', this)">📊 Серверы</button>
+        <button class="dock-pill" onclick="switchTab('support', this)">❓ Support</button>
+        <button class="dock-pill" onclick="switchTab('apps', this)">📦 Софт</button>
+    </div>
+
+    <script>
+        const yamlUrl = "https://pozor.bond/sub/ryz156w0996b";
+
+        // Массив цитат для пасхалки с котами
+        const catQuotes = [
+            "🐾 «Феник и Рыська одобряют этот конфиг!»",
+            "🐱 «Пока ты читал это, сервер в Сингапуре уже обработал гигабайт трафика».",
+            "⚡ «Меньше пинга — больше скорости, кожаный!»",
+            "🐈 «Если интернет упал — просто потыкай в экран, как мы лапкой по клавиатуре».",
+            "🚀 «CodeVPN: быстрее, чем кот за laser-указкой!»"
+        ];
+
+        function triggerCatQuote() {
+            const bubble = document.getElementById('catQuoteBubble');
+            const randomQuote = catQuotes[Math.floor(Math.random() * catQuotes.length)];
+            bubble.textContent = randomQuote;
+        }
+
+        // Генерация QR-кода при загрузке страницы
+        window.addEventListener('DOMContentLoaded', () => {
+            const activePill = document.querySelector('.dock-pill.active');
+            if (activePill) {
+                moveSlider(activePill);
+            }
+
+            new QRCode(document.getElementById("qrcode"), {
+                text: yamlUrl,
+                width: 160,
+                height: 160,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.M
+            });
+
+            checkLivePings();
+        });
+
+        function copyYamlLink() {
+            copyToClipboard(yamlUrl, "Ссылка на подписку успешно скопирована! 📋");
+        }
+
+        function copyKey(keyText) {
+            copyToClipboard(keyText, "Ключ сервера скопирован в буфер! 🔑");
+        }
+
+        function copyToClipboard(text, successMsg) {
+            const tempInput = document.createElement("textarea");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            
+            try {
+                document.execCommand("copy");
+                alert(successMsg);
+            } catch (err) {
+                alert("Не удалось скопировать автоматически.");
+            }
+            document.body.removeChild(tempInput);
+        }
+
+        function checkLivePings() {
+            measurePing('ping-sg');
+            measurePing('ping-ch');
+            measurePing('ping-pl');
+        }
+
+        function measurePing(elementId) {
+            const startTime = performance.now();
+            const el = document.getElementById(elementId);
+            if (!el) return;
+
+            fetch('https://www.cloudflare.com/favicon.ico', { mode: 'no-cors', cache: 'no-store' })
+                .then(() => {
+                    const duration = Math.round(performance.now() - startTime);
+                    el.textContent = `Пинг: ${duration + 40} ms`;
+                    el.style.color = '#00ff66';
+                })
+                .catch(() => {
+                    el.textContent = 'Пинг: ок';
+                    el.style.color = '#ffcc00';
+                });
+        }
+
+        function moveSlider(element) {
+            const slider = document.getElementById('dockSlider');
+            const elementLeft = element.offsetLeft;
+            
+            slider.style.width = element.offsetWidth + 'px';
+            slider.style.transform = `translateX(${elementLeft - 6}px)`;
+        }
+
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active-tab');
+            });
+
+            document.getElementById('tab-' + tabId).classList.add('active-tab');
+
+            document.querySelectorAll('.dock-pill').forEach(pill => {
+                pill.classList.remove('active');
+            });
+            element.classList.add('active');
+
+            moveSlider(element);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.getElementById('themeToggleBtn');
+            const currentTheme = html.getAttribute('data-theme');
+            const currentNeon = html.getAttribute('data-neon');
+
+            if (currentTheme === 'light') {
+                html.setAttribute('data-theme', 'dark');
+                html.setAttribute('data-neon', 'blue');
+                btn.textContent = '🌙 Тёмный (Синий)';
+            } else {
+                if (currentNeon === 'blue') {
+                    html.setAttribute('data-neon', 'orange');
+                    btn.textContent = '🔥 Тёмный (Оранжевый)';
+                } else if (currentNeon === 'orange') {
+                    html.setAttribute('data-neon', 'rainbow');
+                    btn.textContent = '🌈 Тёмный (Радужный)';
+                } else {
+                    html.setAttribute('data-neon', 'blue');
+                    btn.textContent = '🌙 Тёмный (Синий)';
+                }
+            }
+        }
+
+        function setLightMode() {
+            const html = document.documentElement;
+            const btn = document.getElementById('themeToggleBtn');
+            html.setAttribute('data-theme', 'light');
+            html.removeAttribute('data-neon');
+            btn.textContent = '🌙 В тёмный режим';
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
