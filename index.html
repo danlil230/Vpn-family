@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeVPN — Notification Guide Edition</title>
+    <title>CodeVPN — Chrome & Notifications Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <!-- QR Code Generator -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -976,12 +976,12 @@
     <!-- КАСТОМНОЕ ПРОЗРАЧНОЕ ОКНО ПРИВЕТСТВИЯ ДЛЯ УВЕДОМЛЕНИЙ -->
     <div id="customNotifModal">
         <div class="notif-modal-card">
-            <div style="font-size: 2.5rem; margin-bottom: 12px;">👋</div>
-            <h3 style="color: #fff; margin-bottom: 10px; font-size: 1.2rem;">Привет!</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
+            <div style="font-size: 2.5rem; margin-bottom: 12px;" id="modalEmoji">👋</div>
+            <h3 style="color: #fff; margin-bottom: 10px; font-size: 1.2rem;" id="modalTitle">Привет!</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;" id="modalText">
                 Сейчас сверху появится плашка <strong>«Разрешить уведомления»</strong>. Активируй её и подтверди действие, тогда эта плашка уберётся.
             </p>
-            <div style="display: flex; gap: 10px; justify-content: center; flex-direction: column;">
+            <div style="display: flex; gap: 10px; justify-content: center; flex-direction: column;" id="modalButtons">
                 <button class="riddle-btn" onclick="requestCustomNotification()" style="background: var(--primary-neon); color: #fff; width: 100%;">🚀 Понятно, запросить плашку</button>
                 <a class="notif-guide-link" onclick="showHelpModal()">❓ Плашка не появилась? Кликни для инструкции</a>
             </div>
@@ -1018,7 +1018,7 @@
         <div class="network-status-bar">
             <div class="status-indicator">
                 <div class="status-dot"></div>
-                <span>Статус системы: Notification Guide Active 🚀</span>
+                <span>Статус системы: Chrome & Notification Guard 🚀</span>
             </div>
             <span style="font-size: 0.72rem; color: var(--text-muted);">Live</span>
         </div>
@@ -1321,7 +1321,7 @@
 
         <!-- ФУТЕР ДЛЯ РЕЖИМА РАЗРАБОТЧИКА (7 КЛИКОВ) -->
         <footer onclick="handleDevClick()">
-            &copy; 2026 <span>CodeVPN Project</span>. Notification Guide & Dev Mode 🐾
+            &copy; 2026 <span>CodeVPN Project</span>. Chrome & Dev Mode 🐾
         </footer>
     </div>
 
@@ -1342,17 +1342,21 @@
         let devClickCount = 0;
         let countdownInterval = null;
         let warned10Mins = false;
+        let isYandexBrowser = false;
 
         const catQuotes = [
             "🐾 «Радужный неон переливается всеми цветами киберпанка!»",
             "🐱 «Фоновая сетка теперь крупная и просвечивает сквозь плитки».",
             "⚡ «Переключай 120 / 60 FPS под свои задачи!»",
             "🐈 «Шлюз Gist раздает свежие микс-подписки каждые 24 часа».",
-            "🚀 «CodeVPN: Центр уведомлений и таймер на страже!»"
+            "🚀 «CodeVPN: Chrome зафиксирован, работаем!»"
         ];
 
-        /* Инициализация при загрузке страницы */
+        /* Определение браузера при загрузке */
         window.addEventListener('DOMContentLoaded', () => {
+            const ua = navigator.userAgent.toLowerCase();
+            isYandexBrowser = ua.includes('yabrowser') || ua.includes('yandex');
+
             setTimeout(() => {
                 const bootScreen = document.getElementById('cyberBootScreen');
                 if (bootScreen) {
@@ -1363,10 +1367,33 @@
                 }
             }, 1800);
 
-            // Показываем приветственное окно, если уведомления еще не запрошены
+            // Если открыто в Яндексе или Chrome, настраиваем модалку уведомлений
             if ("Notification" in window && Notification.permission === "default") {
                 setTimeout(() => {
-                    document.getElementById('customNotifModal').style.display = 'flex';
+                    const modal = document.getElementById('customNotifModal');
+                    const emojiEl = document.getElementById('modalEmoji');
+                    const titleEl = document.getElementById('modalTitle');
+                    const textEl = document.getElementById('modalText');
+                    const buttonsEl = document.getElementById('modalButtons');
+
+                    if (isYandexBrowser) {
+                        emojiEl.textContent = "🦊";
+                        titleEl.textContent = "Упс!";
+                        textEl.innerHTML = "Зайди через <strong>Google Chrome</strong>, иначе уведомления не включить. Трудимся и скоро будем пропускать и Яндекс!";
+                        buttonsEl.innerHTML = `
+                            <button class="riddle-btn" onclick="closeCustomModal()" style="background: var(--primary-neon); color: #fff; width: 100%;">Понятно, ок 👍</button>
+                        `;
+                    } else {
+                        // Для Chrome показываем штатный призыв к плашке
+                        emojiEl.textContent = "👋";
+                        titleEl.textContent = "Привет!";
+                        textEl.innerHTML = "Сейчас сверху появится плашка <strong>«Разрешить уведомления»</strong>. Активируй её и подтверди действие, тогда эта плашка уберётся.";
+                        buttonsEl.innerHTML = `
+                            <button class="riddle-btn" onclick="requestCustomNotification()" style="background: var(--primary-neon); color: #fff; width: 100%;">🚀 Понятно, запросить плашку</button>
+                            <a class="notif-guide-link" onclick="showHelpModal()">❓ Плашка не появилась? Кликни для инструкции</a>
+                        `;
+                    }
+                    modal.style.display = 'flex';
                 }, 2500);
             }
 
@@ -1394,8 +1421,16 @@
             checkGistGatewayTimer();
         });
 
-        /* Запрос уведомлений из кастомного окна */
+        function closeCustomModal() {
+            document.getElementById('customNotifModal').style.display = 'none';
+        }
+
+        /* Запрос уведомлений для Chrome */
         function openCustomNotifModal() {
+            if (isYandexBrowser) {
+                alert("⚠️ Упс! Зайди через Google Chrome, иначе уведомления не включить. Трудимся и скоро будем пропускать и Яндекс!");
+                return;
+            }
             document.getElementById('customNotifModal').style.display = 'flex';
         }
 
@@ -1419,20 +1454,23 @@
         }
 
         function showHelpModal() {
-            alert("💡 Инструкция:\n\nЕсли браузер заблокировал плашку или она не появилась:\n1. Нажми на иконку «замочка» 🔒 слева от адреса сайта вверху.\n2. Перейди в «Разрешения сайта» или «Уведомления».\n3. Смени статус с «Блокировать» на «Спрашивать» или «Разрешить».\n4. Перезагрузи страницу!");
+            alert("💡 Инструкция для Google Chrome:\n\nЕсли браузер заблокировал плашка или она не появилась:\n1. Нажми на иконку «замочка» 🔒 слева от адреса сайта вверху.\n2. Перейди в «Разрешения сайта» или «Уведомления».\n3. Смени статус с «Блокировать» на «Разрешить».\n4. Перезагрузи страницу!");
         }
 
         function updateNotifStatusText() {
             const statusEl = document.getElementById('notifStatusText');
             if (!statusEl) return;
             
-            if (!("Notification" in window)) {
+            if (isYandexBrowser) {
+                statusEl.textContent = "🦊 Яндекс.Браузер: Уведомления недоступны. Зайди через Google Chrome!";
+                statusEl.style.color = "#ffcc00";
+            } else if (!("Notification" in window)) {
                 statusEl.textContent = "⚠️ Браузер не поддерживает уведомления.";
             } else if (Notification.permission === "granted") {
                 statusEl.textContent = "✅ Статус: Уведомления активны (шлюз под защитой)!";
                 statusEl.style.color = "#00ff66";
             } else if (Notification.permission === "denied") {
-                statusEl.textContent = "❌ Статус: Заблокированы. Нажми на замочек 🔒 в адресной строке браузера, чтобы разрешить их.";
+                statusEl.textContent = "❌ Статус: Заблокированы. Нажми на замочек 🔒 в адресной строке Chrome, чтобы разрешить их.";
                 statusEl.style.color = "#ff4d4d";
             } else {
                 statusEl.textContent = "⏳ Статус: Еще не настроены. Нажми кнопку ниже!";
