@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" data-theme="dark" data-neon="rainbow">
+<html lang="ru" data-theme="dark" data-neon="rainbow" data-fps="120">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -82,80 +82,56 @@
         .win10-dot:nth-child(8) { top: 6px; left: 6px; }
 
         /* ========================================== */
-        /* ФИРМЕННЫЙ ЗОЛОТОЙ ЭКРАН КРАША (NO SIGNAL)   */
+        /* ФИРМЕННЫЙ СИНИЙ ЭКРАН СМЕРТИ (BSOD СЕТИ)    */
         /* ========================================== */
-        #goldCrashScreen {
+        #netCrashScreen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: linear-gradient(135deg, #ffd700, #ff8c00);
-            color: #000000;
+            background-color: #0078d7; /* Классический синий цвет Windows */
+            color: #ffffff;
             z-index: 999999;
             display: none;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            padding: 30px;
-            text-align: center;
-            font-family: 'Inter', sans-serif;
+            padding: 40px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        #goldCrashScreen h1 {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: -1px;
+        .bsod-content {
+            max-width: 650px;
         }
 
-        #goldCrashScreen p {
-            font-size: 1.2rem;
-            margin-bottom: 25px;
-            font-weight: 600;
+        .bsod-sad {
+            font-size: 90px;
+            font-weight: 300;
+            margin-bottom: 20px;
+            line-height: 1;
         }
 
-        .crash-progress-container {
-            width: 300px;
-            height: 12px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 6px;
-            overflow: hidden;
-            border: 2px solid #000;
+        .bsod-text {
+            font-size: 22px;
+            font-weight: 300;
+            line-height: 1.5;
+            margin-bottom: 30px;
         }
 
-        .crash-progress-bar {
-            width: 0%;
-            height: 100%;
-            background: #000;
-            transition: width 0.05s linear;
+        .bsod-btn {
+            background: #ffffff;
+            color: #0078d7;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        /* Эффект старого телевизора / No Signal Overshow */
-        .nosignal-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.15), rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px);
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .nosignal-overlay.active {
-            opacity: 1;
-            animation: glitchEffect 0.2s infinite;
-        }
-
-        @keyframes glitchEffect {
-            0% { transform: translate(0, 0); }
-            20% { transform: translate(-5px, 5px); }
-            40% { transform: translate(5px, -5px); }
-            60% { transform: translate(-3px, -3px); }
-            80% { transform: translate(3px, 3px); }
-            100% { transform: translate(0, 0); }
+        .bsod-btn:hover {
+            background: rgba(255,255,255,0.9);
         }
 
         /* ========================================== */
@@ -953,16 +929,15 @@
         </div>
     </div>
 
-    <!-- ФИРМЕННЫЙ ЗОЛОТОЙ ЭКРАН КРАША С ПРОЦЕНТАМИ И NO SIGNAL -->
-    <div id="goldCrashScreen">
-        <div class="nosignal-overlay" id="noSignalOverlay"></div>
-        <div style="position: relative; z-index: 2;">
-            <h1>⚠️ Упс, твой браузер затупил</h1>
-            <p>Погоди, отправляемся в экстренную перезагрузку...</p>
-            <div style="font-size: 2rem; font-family: 'Fira Code', monospace; font-weight: 800; margin-bottom: 20px;" id="crashPercent">0%</div>
-            <div class="crash-progress-container">
-                <div class="crash-progress-bar" id="crashProgressBar"></div>
+    <!-- СИНИЙ ЭКРАН СМЕРТИ (BSOD ПРИ ПРОПАЖЕ ИНТЕРНЕТА ИЛИ СЛАБОМ СИГНАЛЕ) -->
+    <div id="netCrashScreen">
+        <div class="bsod-content">
+            <div class="bsod-sad">:(</div>
+            <div class="bsod-text">
+                Упс, сайт завис со всей дури. У тебя пропал инет (или упал до слабой сети). 
+                Пожалуйста, перезагрузи сайт или попробуй подключиться к Wi-Fi, 4G или 5G.
             </div>
+            <button class="bsod-btn" onclick="window.location.reload()">🔄 Перезагрузить сайт</button>
         </div>
     </div>
 
@@ -970,21 +945,21 @@
     <div id="toast">🔑 Успешно скопировано в буфер!</div>
 
     <div class="container">
-        <!-- Верхняя панель (Только Турбо 120 FPS без тормозящих 60 FPS) -->
+        <!-- Верхняя панель -->
         <div class="top-bar">
             <div class="top-switcher-bar">
                 <button class="switch-btn" id="themeToggleBtn" onclick="toggleTheme()">🌈 Радужный неон</button>
                 <button class="switch-btn" id="lightModeBtn" onclick="toggleLightMode()">☀️ Белый</button>
-                <button class="switch-btn" onclick="triggerCrashScreen()">⚠️ Симуляция затупа</button>
+                <button class="switch-btn" onclick="triggerNetCrash()">⚠️ Симуляция сбоя сети</button>
             </div>
-            <div class="theme-tip">(P.S. Режим Турбо 120 FPS активен постоянно — сайт летает за тобой!)</div>
+            <div class="theme-tip">(P.S. Турбо 120 FPS активен постоянно — сайт летает за тобой!)</div>
         </div>
 
         <!-- Статус-бар -->
         <div class="network-status-bar">
             <div class="status-indicator">
-                <div class="status-dot"></div>
-                <span>Статус системы: RGB Gaming Neon & Crash Guard 🚀</span>
+                <div class="status-dot" id="netStatusDot"></div>
+                <span id="netStatusText">Статус системы: RGB Gaming Neon & Net Guard 🚀</span>
             </div>
             <span style="font-size: 0.72rem; color: var(--text-muted);">Live</span>
         </div>
@@ -1047,8 +1022,8 @@
                 <p style="color: var(--text-muted); margin-bottom: 20px;">Здесь публикуются все важные новости проекта и апдейты конфигураций.</p>
                 
                 <div class="update-banner">
-                    <h3>🏆 Апдейт: Умный Золотой Экран Затупа</h3>
-                    <p>Медленный режим 60 FPS полностью удален, чтобы исключить лаги. Добавлен золотой экран авто-краша с процентами и No Signal Overshow эффектом перед перезагрузкой! 🚀</p>
+                    <h3>📡 Апдейт: Детектор сбоя сети (BSOD Net Guard)</h3>
+                    <p>Внедрен умный мониторинг соединения. Если интернет пропадает или падает до слабой сети (EDGE/2G), сайт мгновенно активирует фирменный синий экран с подсказкой! 🚀</p>
                 </div>
             </div>
         </div>
@@ -1239,7 +1214,7 @@
 
         <!-- ФУТЕР ДЛЯ РЕЖИМА РАЗРАБОТЧИКА (7 КЛИКОВ) -->
         <footer onclick="handleDevClick()">
-            &copy; 2026 <span>CodeVPN Project</span>. Turbo 120 FPS & Dev Mode 🐾
+            &copy; 2026 <span>CodeVPN Project</span>. Net Guard & Dev Mode 🐾
         </footer>
     </div>
 
@@ -1255,14 +1230,14 @@
 
     <script>
         const yamlUrl = "https://pozor.bond/sub/ryz156w0996b";
-        const secretDevPass = "9142"; // Динамический пароль разработчика
+        const secretDevPass = "5184"; // Динамический пароль разработчика
         let devClickCount = 0;
 
         const catQuotes = [
             "🐾 «Радужный неон переливается всеми цветами киберпанка!»",
             "🐱 «Фоновая сетка теперь крупная и просвечивает сквозь плитки».",
             "⚡ «Турбо 120 FPS на максимум — сайт летает за тобой!»",
-            "🐈 «Если интернет затупил — золото-краш экран всё исправит».",
+            "🐈 «Если интернет упал до 'ешки' — сработает синий экран краша».",
             "🚀 «CodeVPN: без лагов и тормозов!»"
         ];
 
@@ -1296,54 +1271,42 @@
             }
 
             checkLivePings();
-
-            /* Интеллектуальный детектор лагов и зависаний браузера (триггер золотого экрана) */
-            let lastTime = performance.now();
-            let freezeCounter = 0;
-            function checkBrowserLag() {
-                const now = performance.now();
-                const delta = now - lastTime;
-                lastTime = now;
-                // Если поток подвис больше чем на 400 мс (браузер реально затупил или завис)
-                if (delta > 400) {
-                    freezeCounter++;
-                    if (freezeCounter >= 2) { // Если затуп повторился
-                        triggerCrashScreen();
-                        return;
-                    }
-                } else {
-                    if (freezeCounter > 0) freezeCounter--;
-                }
-                requestAnimationFrame(checkBrowserLag);
-            }
-            requestAnimationFrame(checkBrowserLag);
+            initNetworkMonitor();
         });
 
-        /* Функция симуляции/активации золотого экрана затупа с процентами и No Signal */
-        function triggerCrashScreen() {
-            const crashScreen = document.getElementById('goldCrashScreen');
-            const progressBar = document.getElementById('crashProgressBar');
-            const percentText = document.getElementById('crashPercent');
-            const overlay = document.getElementById('noSignalOverlay');
-            
-            crashScreen.style.display = 'flex';
-            
-            let currentPercent = 0;
-            const interval = setInterval(() => {
-                currentPercent += 2;
-                if (currentPercent > 100) currentPercent = 100;
-                percentText.textContent = currentPercent + '%';
-                progressBar.style.width = currentPercent + '%';
+        /* Мониторинг сети: ловим пропадание инет-соединения или просадку до 2G/EDGE */
+        function initNetworkMonitor() {
+            // Проверка базового состояния онлайн/офлайн браузера
+            if (!navigator.onLine) {
+                triggerNetCrash();
+            }
 
-                if (currentPercent === 100) {
-                    clearInterval(interval);
-                    overlay.classList.add('active'); // Вспышка No Signal Overshow
-                    showToast("⚡ Перезагрузка системы...");
-                    setTimeout(() => {
-                        window.location.reload(); // Автоперезагрузка страницы
-                    }, 800);
-                }
-            }, 100); // 100мс * 50 шагов = ровно 5 секунд работы экрана
+            window.addEventListener('online', () => {
+                document.getElementById('netCrashScreen').style.display = 'none';
+            });
+
+            window.addEventListener('offline', () => {
+                triggerNetCrash();
+            });
+
+            // Проверка типа соединения через Network Information API (если поддерживается браузером)
+            if (navigator.connection) {
+                const updateConnStatus = () => {
+                    const effectiveType = navigator.connection.effectiveType; // 'slow-2g', '2g', '3g', '4g'
+                    if (effectiveType === '2g' || effectiveType === 'slow-2g') {
+                        // Поймали ту самую "ешку" или 2G
+                        triggerNetCrash();
+                    }
+                };
+                navigator.connection.addEventListener('change', updateConnStatus);
+                updateConnStatus();
+            }
+        }
+
+        /* Активация синего экрана сбоя сети */
+        function triggerNetCrash() {
+            const crashScreen = document.getElementById('netCrashScreen');
+            crashScreen.style.display = 'flex';
         }
 
         /* Обработка кликов по копирайту в футере для вызова Режима разработчика (7 кликов) */
@@ -1441,6 +1404,8 @@
                     .catch(() => {
                         el.textContent = 'Пинг: ок';
                         el.style.color = '#ffcc00';
+                        // Если пинг до cloudflare упал из-за сети — тоже подсвечиваем сбой
+                        triggerNetCrash();
                     });
             });
         }
@@ -1453,9 +1418,9 @@
         }
 
         function switchTab(tabId, element) {
-            document.querySelectorAll('.tab-content').forEach, tab => {
+            document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active-tab');
-            };
+            });
 
             const targetTab = document.getElementById('tab-' + tabId);
             if (targetTab) {
