@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeVPN — Notification Center Edition</title>
+    <title>CodeVPN — Ultimate Single-File Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <!-- QR Code Generator -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -970,7 +970,7 @@
             <div style="font-size: 2.5rem; margin-bottom: 12px;">🔔</div>
             <h3 style="color: #fff; margin-bottom: 10px; font-size: 1.2rem;">Центр уведомлений CodeVPN</h3>
             <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
-                Разреши сайту присылать пуш-весточки, чтобы вовремя узнавать об истечении шлюзов и свежих апдейтах!
+                Разреши сайту присылать пуш-весточки, чтобы за 10 минут до истечения шлюза получать напоминание в шторку!
             </p>
             <div style="display: flex; gap: 10px; justify-content: center;">
                 <button class="riddle-btn" onclick="requestCustomNotification(true)" style="background: var(--primary-neon); color: #fff;">✅ Включить</button>
@@ -1009,7 +1009,7 @@
         <div class="network-status-bar">
             <div class="status-indicator">
                 <div class="status-dot"></div>
-                <span>Статус системы: Custom Notification Center 🚀</span>
+                <span>Статус системы: Single-File Push Gateway 🚀</span>
             </div>
             <span style="font-size: 0.72rem; color: var(--text-muted);">Live</span>
         </div>
@@ -1032,7 +1032,7 @@
                 <div class="steps-list">
                     <li><strong>Выбери софт:</strong> Скачай проверенный клиент во вкладке «Софт».</li>
                     <li><strong>Забери ключи:</strong> Во вкладке «Серверы» пройди загадку и скопируй подписку.</li>
-                    <li><strong>Центр уведомлений:</strong> Настрой кастомные пуши в новом разделе! 🚀</li>
+                    <li><strong>Шлюз Gist:</strong> Забери временный микс с минутным таймером и фоновым пушем! 🚀</li>
                 </div>
             </div>
 
@@ -1072,7 +1072,7 @@
                 <p style="color: var(--text-muted); margin-bottom: 20px;">Управляй оповещениями и следи за свежими апдейтами системы.</p>
                 
                 <div class="update-banner" style="margin-bottom: 20px;">
-                    <h3>🔔 Статус оповещений</h3>
+                    <h3>🔔 Статус оповещений в шторку</h3>
                     <p id="notifStatusText" style="margin-bottom: 15px;">Проверяем статус разрешений...</p>
                     <button class="switch-btn" onclick="openCustomNotifModal()">⚙️ Открыть Центр уведомлений</button>
                 </div>
@@ -1312,7 +1312,7 @@
 
         <!-- ФУТЕР ДЛЯ РЕЖИМА РАЗРАБОТЧИКА (7 КЛИКОВ) -->
         <footer onclick="handleDevClick()">
-            &copy; 2026 <span>CodeVPN Project</span>. Notification Center & Dev Mode 🐾
+            &copy; 2026 <span>CodeVPN Project</span>. Single-File Edition & Dev Mode 🐾
         </footer>
     </div>
 
@@ -1332,13 +1332,14 @@
         const secretDevPass = "9142"; // Динамический пароль разработчика
         let devClickCount = 0;
         let countdownInterval = null;
+        let warned10Mins = false;
 
         const catQuotes = [
             "🐾 «Радужный неон переливается всеми цветами киберпанка!»",
             "🐱 «Фоновая сетка теперь крупная и просвечивает сквозь плитки».",
             "⚡ «Переключай 120 / 60 FPS под свои задачи!»",
             "🐈 «Шлюз Gist раздает свежие микс-подписки каждые 24 часа».",
-            "🚀 «CodeVPN: Центр уведомлений активен!»"
+            "🚀 «CodeVPN: Центр уведомлений и таймер на страже!»"
         ];
 
         /* Инициализация при загрузке страницы */
@@ -1353,7 +1354,6 @@
                 }
             }, 1800);
 
-            // Показываем наше кастомное окно уведомлений через 3 секунды, если разрешение еще не выдано
             if ("Notification" in window && Notification.permission === "default") {
                 setTimeout(() => {
                     document.getElementById('customNotifModal').style.display = 'flex';
@@ -1398,7 +1398,7 @@
                     if (permission === "granted") {
                         showToast("🔔 Уведомления успешно включены!");
                         new Notification("CodeVPN Project 🚀", {
-                            body: "Опа, привет! Центр уведомлений активирован. Мы держим шлюзы под контролем."
+                            body: "Опа, привет! Уведомления активированы. Мы предупредим тебя за 10 минут до истечения шлюза."
                         });
                     } else {
                         showToast("❌ Разрешение на уведомления отклонено.");
@@ -1418,7 +1418,7 @@
             if (!("Notification" in window)) {
                 statusEl.textContent = "⚠️ Браузер не поддерживает уведомления.";
             } else if (Notification.permission === "granted") {
-                statusEl.textContent = "✅ Статус: Уведомления включены и активны!";
+                statusEl.textContent = "✅ Статус: Уведомления активны (шлюз под защитой)!";
                 statusEl.style.color = "#00ff66";
             } else if (Notification.permission === "denied") {
                 statusEl.textContent = "❌ Статус: Заблокированы в настройках браузера.";
@@ -1446,7 +1446,7 @@
             }
         }
 
-        /* Логика шлюза GitHub Gist с минутным таймером на 24 часа */
+        /* Логика шлюза GitHub Gist с минутным таймером и фоновым напоминанием за 10 минут */
         function openGistGateway() {
             const actionBox = document.getElementById('gatewayActionBox');
             const loadingBox = document.getElementById('gatewayLoading');
@@ -1462,6 +1462,7 @@
                 const duration = 24 * 60 * 60 * 1000;
                 const expireTime = new Date().getTime() + duration;
                 localStorage.setItem('codevpn_gist_expire', expireTime);
+                warned10Mins = false;
                 
                 startGatewayTimer(expireTime);
                 showToast("🔓 Шлюз GitHub Gist успешно открыт!");
@@ -1478,6 +1479,15 @@
                 const now = new Date().getTime();
                 const distance = expireTime - now;
 
+                if (distance <= 600000 && distance > 0 && !warned10Mins) {
+                    warned10Mins = true;
+                    if ("Notification" in window && Notification.permission === "granted") {
+                        new Notification("🚨 Внимание, шлюз истекает!", {
+                            body: "Привет! Твой шлюз истекает через 10 минут. Срочно заходи на сайт за новым ключом, иначе останешься без подписки!"
+                        });
+                    }
+                }
+
                 if (distance < 0) {
                     clearInterval(countdownInterval);
                     localStorage.removeItem('codevpn_gist_expire');
@@ -1485,8 +1495,8 @@
                     document.getElementById('gatewayResult').style.display = 'none';
                     
                     if ("Notification" in window && Notification.permission === "granted") {
-                        new Notification("⏳ Шлюз истёк!", {
-                            body: "Твой шлюз обновился. Скорее заходи на сайт за новым миксом ключей!",
+                        new Notification("⏳ Шлюз полностью истёк!", {
+                            body: "Твой шлюз обновился. Скорее заходи на сайт за новым миксом ключей!"
                         });
                     }
                     return;
@@ -1697,4 +1707,4 @@
         }
     </script>
 </body>
-    </html>
+                </html>
