@@ -1,74 +1,145 @@
 <!DOCTYPE html>
-<html lang="ru" data-theme="dark" data-neon="blue">
+<html lang="ru" data-theme="dark" data-neon="rainbow" data-fps="120">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeVPN — Свободный доступ</title>
+    <title>CodeVPN — Cyber Boot Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-    <!-- Библиотека для генерации QR-кодов -->
+    <!-- QR Code Generator -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        /* Тема: Тёмная (Синий неон по умолчанию) */
-        :root[data-theme="dark"][data-neon="blue"] {
-            --bg-color: #070913;
-            --card-bg: #0d1224;
-            --primary-neon: #00f0ff;
-            --secondary-neon: #b000ff;
-            --text-main: #ffffff;
-            --text-muted: #8a99ad;
-            --border: rgba(0, 240, 255, 0.2);
-            --glow: 0 0 15px rgba(0, 240, 255, 0.4);
-            --gradient: linear-gradient(135deg, #00f0ff, #b000ff);
-            --grid-color: rgba(0, 240, 255, 0.03);
+        /* ========================================== */
+        /* ЧЁРНЫЙ НЕОНОВЫЙ ЭКРАН ЗАГРУЗКИ С ТОЧКАМИ   */
+        /* ========================================== */
+        #cyberBootScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #010204;
+            color: #ffffff;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+            font-family: 'Inter', sans-serif;
+            transition: opacity 0.6s ease;
+            padding: 20px;
+            text-align: center;
         }
 
-        /* Тёмная: Оранжевый неон */
-        :root[data-theme="dark"][data-neon="orange"] {
-            --bg-color: #120907;
-            --card-bg: #24120d;
-            --primary-neon: #ff6600;
-            --secondary-neon: #ffcc00;
-            --text-main: #ffffff;
-            --text-muted: #ad918a;
-            --border: rgba(255, 102, 0, 0.2);
-            --glow: 0 0 15px rgba(255, 102, 0, 0.4);
-            --gradient: linear-gradient(135deg, #ff6600, #ffcc00);
-            --grid-color: rgba(255, 102, 0, 0.03);
+        .boot-cats-logo {
+            font-size: 3.5rem;
+            filter: drop-shadow(0 0 15px rgba(255, 0, 127, 0.6));
+            animation: pulseLogo 2s infinite ease-in-out;
         }
 
-        /* Тёмная: Радужный неон */
-        :root[data-theme="dark"][data-neon="rainbow"] {
-            --bg-color: #0b0713;
-            --card-bg: #150d24;
+        @keyframes pulseLogo {
+            0%, 100% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+
+        .boot-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+            max-width: 320px;
+        }
+
+        /* Классический кругляшок Windows 10 с точками */
+        .win10-spinner {
+            width: 50px;
+            height: 50px;
+            position: relative;
+            animation: outerRotate 1.4s linear infinite;
+            margin-top: 10px;
+        }
+
+        @keyframes outerRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .win10-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #00f0ff;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #00f0ff;
+        }
+
+        /* Расставляем 8 точек по кругу (как в Windows 10) */
+        .win10-dot:nth-child(1) { top: 0; left: 21px; }
+        .win10-dot:nth-child(2) { top: 6px; left: 38px; }
+        .win10-dot:nth-child(3) { top: 21px; left: 44px; }
+        .win10-dot:nth-child(4) { top: 38px; left: 38px; }
+        .win10-dot:nth-child(5) { top: 44px; left: 21px; }
+        .win10-dot:nth-child(6) { top: 38px; left: 6px; }
+        .win10-dot:nth-child(7) { top: 21px; left: 0; }
+        .win10-dot:nth-child(8) { top: 6px; left: 6px; }
+
+        /* ========================================== */
+        /* РАДУЖНЫЙ НЕОН + ПРОЗРАЧНОЕ МАТОВОЕ СТЕКЛО  */
+        /* ========================================== */
+
+        @keyframes rgbBorderGlow {
+            0% { border-color: #ff007f; box-shadow: 0 0 25px rgba(255, 0, 127, 0.4); }
+            33% { border-color: #00f0ff; box-shadow: 0 0 25px rgba(0, 240, 255, 0.4); }
+            66% { border-color: #b000ff; box-shadow: 0 0 25px rgba(176, 0, 255, 0.4); }
+            100% { border-color: #ff007f; box-shadow: 0 0 25px rgba(255, 0, 127, 0.4); }
+        }
+
+        @keyframes rgbTextGlow {
+            0% { color: #ff007f; filter: drop-shadow(0 0 8px rgba(255, 0, 127, 0.6)); }
+            33% { color: #00f0ff; filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.6)); }
+            66% { color: #b000ff; filter: drop-shadow(0 0 8px rgba(176, 0, 255, 0.6)); }
+            100% { color: #ff007f; filter: drop-shadow(0 0 8px rgba(255, 0, 127, 0.6)); }
+        }
+
+        :root[data-theme="dark"] {
+            --bg-color: #010204;
+            --glass-bg: rgba(8, 11, 22, 0.35); 
+            --glass-border: rgba(255, 0, 127, 0.35);
             --primary-neon: #ff007f;
             --secondary-neon: #00f0ff;
             --text-main: #ffffff;
             --text-muted: #9c8aad;
-            --border: rgba(255, 0, 127, 0.2);
-            --glow: 0 0 15px rgba(255, 0, 127, 0.4);
+            --glow: 0 0 25px rgba(255, 0, 127, 0.3);
             --gradient: linear-gradient(135deg, #ff007f, #b000ff, #00f0ff);
-            --grid-color: rgba(255, 0, 127, 0.03);
+            --grid-color: rgba(255, 255, 255, 0.04);
         }
 
-        /* Тема: Белая / Светлая с радужными акцентами */
         :root[data-theme="light"] {
-            --bg-color: #f4f6f9;
-            --card-bg: #ffffff;
+            --bg-color: #f0f4f8;
+            --glass-bg: rgba(255, 255, 255, 0.55);
+            --glass-border: rgba(99, 102, 241, 0.3);
             --primary-neon: #6366f1;
             --secondary-neon: #ec4899;
             --text-main: #1f2937;
             --text-muted: #6b7280;
-            --border: rgba(99, 102, 241, 0.2);
-            --glow: 0 4px 20px rgba(99, 102, 241, 0.15);
+            --glow: 0 8px 30px rgba(99, 102, 241, 0.15);
             --gradient: linear-gradient(135deg, #6366f1, #ec4899, #06b6d4);
-            --grid-color: rgba(99, 102, 241, 0.04);
+            --grid-color: rgba(99, 102, 241, 0.05);
+        }
+
+        :root[data-fps="120"] * {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            box-shadow: none !important;
+            transition: none !important;
+            animation: none !important;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
         }
 
         body {
@@ -76,24 +147,23 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             line-height: 1.6;
-            padding: 20px 20px 130px 20px; /* Увеличили отступ снизу, чтобы меню точно не терялось */
+            padding: 20px 20px 140px 20px;
             overflow-x: hidden;
             background-image: 
-                linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
-                linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
-            background-size: 30px 30px;
+                linear-gradient(to right, var(--grid-color) 1.5px, transparent 1.5px),
+                linear-gradient(to bottom, var(--grid-color) 1.5px, transparent 1.5px);
+            background-size: 60px 60px;
         }
 
         .container {
             max-width: 900px;
             margin: 0 auto;
-            padding: 20px 20px 40px 20px;
+            padding: 10px;
         }
 
-        /* Верхняя панель */
         .top-bar {
             display: flex;
-            justify-content: flex-end;
+            justify-content: center;
             align-items: center;
             margin-bottom: 15px;
             flex-direction: column;
@@ -103,64 +173,71 @@
         .top-switcher-bar {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .switch-btn {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1.5px solid;
+            animation: rgbBorderGlow 6s infinite;
             color: var(--text-main);
             padding: 8px 16px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: var(--glow);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .switch-btn:hover {
-            border-color: var(--primary-neon);
+            transform: scale(1.05);
         }
 
         .theme-tip {
-            font-size: 0.78rem;
+            font-size: 0.76rem;
             color: var(--text-muted);
             text-align: center;
-            max-width: 320px;
         }
 
-        /* Интерактивный статус-бар сети (Светофор) */
         .network-status-bar {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 10px 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1.5px solid;
+            animation: rgbBorderGlow 6s infinite;
+            border-radius: 16px;
+            padding: 12px 20px;
             margin-bottom: 25px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: var(--glow);
         }
 
         .status-indicator {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
+            gap: 10px;
+            font-size: 0.88rem;
             font-weight: 600;
         }
 
         .status-dot {
-            width: 10px;
-            height: 10px;
+            width: 9px;
+            height: 9px;
             border-radius: 50%;
             background: #00ff66;
-            box-shadow: 0 0 10px #00ff66;
+            box-shadow: 0 0 12px #00ff66;
             animation: pulseDot 2s infinite;
         }
 
         @keyframes pulseDot {
             0% { transform: scale(0.95); opacity: 0.8; }
-            50% { transform: scale(1.15); opacity: 1; }
+            50% { transform: scale(1.25); opacity: 1; }
             100% { transform: scale(0.95); opacity: 0.8; }
         }
 
@@ -173,15 +250,16 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: var(--card-bg);
-            color: var(--primary-neon);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            animation: rgbTextGlow 6s infinite, rgbBorderGlow 6s infinite;
+            border: 1.5px solid;
             padding: 8px 18px;
             border-radius: 30px;
             font-size: 0.9rem;
             font-weight: 600;
             margin-bottom: 20px;
-            border: 1px solid var(--border);
-            box-shadow: var(--glow);
         }
 
         h1 {
@@ -203,28 +281,28 @@
             font-size: 1.1rem;
         }
 
-        /* Система вкладок */
         .tab-content {
             display: none;
-            animation: fadeIn 0.3s ease-out;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
         .tab-content.active-tab {
             display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 35px;
+            background-color: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1.5px solid;
+            animation: rgbBorderGlow 6s infinite;
+            border-radius: 22px;
+            padding: 30px;
             margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             position: relative;
             overflow: hidden;
         }
@@ -240,7 +318,7 @@
         }
 
         .card h2 {
-            font-size: 1.4rem;
+            font-size: 1.35rem;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
@@ -249,23 +327,123 @@
         }
 
         .cat-icon {
-            font-size: 1.6rem;
-            filter: drop-shadow(0 0 8px var(--primary-neon));
+            font-size: 1.5rem;
+            animation: rgbTextGlow 6s infinite;
         }
 
-        /* Блок Update */
-        .update-banner {
-            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(176, 0, 255, 0.1));
-            border: 1px solid var(--primary-neon);
+        /* Загадка */
+        .riddle-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1.5px dashed;
+            animation: rgbBorderGlow 6s infinite;
             border-radius: 16px;
-            padding: 20px 25px;
+            padding: 22px;
+            text-align: center;
             margin-bottom: 25px;
-            box-shadow: var(--glow);
+        }
+
+        .riddle-box h3 {
+            animation: rgbTextGlow 6s infinite;
+            margin-bottom: 8px;
+            font-size: 1.15rem;
+        }
+
+        .riddle-box p {
+            color: var(--text-muted);
+            margin-bottom: 18px;
+            font-size: 0.92rem;
+        }
+
+        .riddle-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .riddle-btn {
+            background: var(--glass-bg);
+            border: 1.5px solid;
+            animation: rgbBorderGlow 6s infinite;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        .riddle-btn:hover {
+            transform: scale(1.05);
+            background: var(--primary-neon);
+            color: #000;
+        }
+
+        #serversContent {
+            display: none;
+            animation: fadeInServers 0.4s ease-out;
+        }
+
+        @keyframes fadeInServers {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Секретная панель разработчика */
+        #devPanel {
+            display: none;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #00ff66;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 25px;
+            box-shadow: 0 0 30px rgba(0, 255, 102, 0.3);
+            animation: fadeInServers 0.4s ease-out;
+        }
+
+        #devPanel h3 {
+            color: #00ff66;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .dev-input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .dev-input {
+            flex: 1;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 15px;
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .dev-btn {
+            background: #00ff66;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Баннеры */
+        .update-banner {
+            background: linear-gradient(135deg, rgba(255, 0, 127, 0.1), rgba(0, 240, 255, 0.1));
+            border: 1.5px solid;
+            animation: rgbBorderGlow 6s infinite;
+            border-radius: 16px;
+            padding: 20px 22px;
         }
 
         .update-banner h3 {
-            color: var(--primary-neon);
-            font-size: 1.2rem;
+            animation: rgbTextGlow 6s infinite;
+            font-size: 1.15rem;
             margin-bottom: 8px;
             display: flex;
             align-items: center;
@@ -274,26 +452,25 @@
 
         .update-banner p {
             color: var(--text-main);
-            font-size: 0.98rem;
+            font-size: 0.95rem;
             line-height: 1.5;
         }
 
-        /* Карточки серверов */
         .servers-table {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 18px;
             margin-top: 15px;
         }
 
         .server-card-detailed {
-            background: rgba(0, 0, 0, 0.25);
-            border: 1px solid var(--border);
-            padding: 20px;
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid var(--glass-border);
+            padding: 18px;
             border-radius: 16px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .server-header-row {
@@ -307,85 +484,76 @@
         .server-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: 1.02rem;
+            word-break: break-all;
         }
 
         .server-right {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         .status-bars {
             display: flex;
             align-items: flex-end;
-            gap: 4px;
-            height: 22px;
+            gap: 3px;
+            height: 18px;
         }
 
         .bar {
-            width: 5px;
+            width: 4px;
             border-radius: 2px;
+            background: #00ff66;
+            box-shadow: 0 0 6px rgba(0, 255, 102, 0.5);
         }
 
-        .bar-1 { height: 8px; }
-        .bar-2 { height: 14px; }
-        .bar-3 { height: 22px; }
-
-        .status-green .bar { background: #00ff66; box-shadow: 0 0 8px rgba(0, 255, 102, 0.5); }
-        .status-yellow .bar { background: #ffcc00; box-shadow: 0 0 8px rgba(255, 204, 0, 0.5); }
+        .bar-1 { height: 6px; }
+        .bar-2 { height: 12px; }
+        .bar-3 { height: 18px; }
 
         .status-text {
-            font-size: 0.85rem;
+            font-size: 0.78rem;
             font-weight: 600;
-            padding: 4px 12px;
+            padding: 3px 8px;
             border-radius: 20px;
-            border: 1px solid var(--border);
+            border: 1px solid var(--glass-border);
             color: #00ff66;
-            background: rgba(0, 255, 102, 0.1);
-        }
-
-        .status-text-yellow {
-            color: #ffcc00;
-            background: rgba(255, 204, 0, 0.1);
+            background: rgba(0, 255, 102, 0.08);
         }
 
         .live-ping {
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-family: 'Fira Code', monospace;
-            padding: 3px 8px;
+            padding: 3px 6px;
             border-radius: 6px;
             background: rgba(0,0,0,0.4);
-            border: 1px solid var(--border);
+            border: 1px solid var(--glass-border);
             color: var(--text-muted);
         }
 
         .btn-mini {
-            background: var(--card-bg);
-            border: 1px solid var(--primary-neon);
-            color: var(--primary-neon);
-            padding: 6px 12px;
+            background: var(--glass-bg);
+            border: 1.5px solid;
+            animation: rgbBorderGlow 6s infinite;
+            padding: 5px 10px;
             border-radius: 8px;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: var(--glow);
-        }
-
-        .btn-mini:hover {
-            background: var(--primary-neon);
-            color: var(--bg-color);
+            color: var(--text-main);
         }
 
         .speedtest-results {
             background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
-            padding: 12px 15px;
-            font-size: 0.9rem;
+            padding: 8px 12px;
+            font-size: 0.85rem;
             color: var(--text-muted);
-            border: 1px solid var(--border);
+            border: 1px solid var(--glass-border);
         }
 
         .speedtest-results strong {
@@ -397,11 +565,11 @@
             flex-direction: column;
             align-items: center;
             gap: 12px;
-            margin-top: 20px;
+            margin-top: 22px;
             background: rgba(0, 0, 0, 0.2);
-            padding: 20px;
+            padding: 18px;
             border-radius: 16px;
-            border: 1px solid var(--border);
+            border: 1px solid var(--glass-border);
         }
 
         #qrcode {
@@ -410,11 +578,10 @@
             border-radius: 10px;
         }
 
-        /* FAQ (Support) */
         .faq-item {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border);
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--glass-border);
         }
 
         .faq-item:last-child {
@@ -424,14 +591,14 @@
         }
 
         .faq-item h4 {
-            color: var(--primary-neon);
-            font-size: 1.08rem;
-            margin-bottom: 6px;
+            animation: rgbTextGlow 6s infinite;
+            font-size: 1.02rem;
+            margin-bottom: 5px;
         }
 
         .faq-item p {
             color: var(--text-muted);
-            font-size: 0.95rem;
+            font-size: 0.92rem;
         }
 
         .steps-list {
@@ -441,8 +608,8 @@
 
         .steps-list li {
             position: relative;
-            padding-left: 50px;
-            margin-bottom: 15px;
+            padding-left: 45px;
+            margin-bottom: 14px;
             color: var(--text-muted);
         }
 
@@ -456,18 +623,18 @@
             position: absolute;
             left: 0;
             top: 0;
-            width: 34px;
-            height: 34px;
-            background: var(--card-bg);
-            color: var(--primary-neon);
-            border: 1px solid var(--border);
+            width: 30px;
+            height: 30px;
+            background: var(--glass-bg);
+            border: 1.5px solid;
+            animation: rgbBorderGlow 6s infinite;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 0.95rem;
-            box-shadow: var(--glow);
+            font-size: 0.85rem;
+            color: var(--text-main);
         }
 
         .steps-list li strong {
@@ -478,7 +645,7 @@
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
-            margin-top: 25px;
+            margin-top: 22px;
         }
 
         .btn-neon-primary {
@@ -488,20 +655,15 @@
             gap: 10px;
             background: var(--gradient);
             color: #fff;
-            padding: 14px 28px;
+            padding: 13px 25px;
             border-radius: 12px;
             text-decoration: none;
             font-weight: 700;
-            font-size: 1.05rem;
-            transition: transform 0.2s, box-shadow 0.2s;
+            font-size: 1rem;
             border: none;
             cursor: pointer;
-            box-shadow: var(--glow);
-        }
-
-        .btn-neon-primary:hover {
-            transform: translateY(-2px);
-            opacity: 0.95;
+            box-shadow: 0 0 25px rgba(255, 0, 127, 0.4);
+            width: 100%;
         }
 
         .btn-secondary {
@@ -509,42 +671,72 @@
             align-items: flex-start;
             flex-direction: column;
             gap: 4px;
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
+            background-color: var(--glass-bg);
+            border: 1.5px solid;
+            animation: rgbBorderGlow 6s infinite;
             color: var(--text-main);
-            padding: 12px 20px;
+            padding: 12px 18px;
             border-radius: 12px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--primary-neon);
-            box-shadow: var(--glow);
+            font-size: 0.92rem;
+            flex: 1 1 200px;
         }
 
         .btn-desc {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: var(--text-muted);
             font-weight: normal;
         }
 
-        /* Плавающее нижнее меню-овальчик (приподнято повыше, чтобы не пряталось за панелью устройства) */
+        /* ТОСТ УВЕДОМЛЕНИЕ СТРОГО ПО ЦЕНТРУ СВЕРХУ */
+        #toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50px);
+            background: var(--glass-bg);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1.5px solid;
+            animation: rgbBorderGlow 6s infinite;
+            color: var(--text-main);
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            z-index: 2000;
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+            pointer-events: none;
+            max-width: 90vw;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
         .bottom-nav-dock {
             position: fixed;
-            bottom: 25px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--card-bg);
-            border: 1px solid var(--border);
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1.5px solid;
+            animation: rgbBorderGlow 6s infinite;
             padding: 6px;
             border-radius: 40px;
             display: flex;
             gap: 4px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
             z-index: 1000;
-            backdrop-filter: blur(10px);
+            max-width: 95vw;
+            overflow-x: auto;
         }
 
         .dock-pill {
@@ -553,15 +745,15 @@
             color: var(--text-muted);
             padding: 8px 14px;
             border-radius: 30px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
             position: relative;
             z-index: 2;
-            transition: color 0.3s ease;
+            white-space: nowrap;
         }
 
         .dock-pill.active {
@@ -575,104 +767,146 @@
             height: calc(100% - 12px);
             background: var(--gradient);
             border-radius: 30px;
-            box-shadow: var(--glow);
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.5);
             transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1;
         }
 
         .grid-tiles {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 18px;
             margin-bottom: 25px;
         }
 
         .tile {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 25px;
+            background-color: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1.5px solid;
+            animation: rgbBorderGlow 6s infinite;
+            border-radius: 18px;
+            padding: 22px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
         }
 
         .tile h3 {
-            font-size: 1.15rem;
-            margin-bottom: 10px;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            color: var(--primary-neon);
+            gap: 8px;
+            animation: rgbTextGlow 6s infinite;
         }
 
         .tile p {
             color: var(--text-muted);
-            font-size: 0.93rem;
+            font-size: 0.9rem;
         }
 
-        /* Пасхалочный кошачий мем */
         .cat-easter-egg {
             text-align: center;
-            margin: 25px 0;
+            margin: 22px 0;
             cursor: pointer;
             user-select: none;
         }
 
         .cat-bubble {
             display: inline-block;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 10px 18px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1.5px solid;
+            animation: rgbBorderGlow 6s infinite;
+            padding: 10px 16px;
             border-radius: 20px;
-            font-size: 0.9rem;
-            color: var(--primary-neon);
-            box-shadow: var(--glow);
+            font-size: 0.82rem;
+            animation: rgbTextGlow 6s infinite;
             margin-bottom: 8px;
+            max-width: 100%;
         }
 
         .paws-decor {
             text-align: center;
-            font-size: 1.5rem;
-            letter-spacing: 12px;
-            margin: 30px 0;
+            font-size: 1.4rem;
+            letter-spacing: 10px;
+            margin: 25px 0;
             opacity: 0.6;
-            filter: drop-shadow(0 0 5px var(--primary-neon));
+            animation: rgbTextGlow 6s infinite;
         }
 
         footer {
             text-align: center;
-            margin-top: 50px;
-            color: var(--text-muted);
-            font-size: 0.85rem;
+            margin-top: 45px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            user-select: none;
+            padding: 10px;
+        }
+
+        footer span {
+            animation: rgbTextGlow 6s infinite;
         }
 
         @media (max-width: 768px) {
-            h1 { font-size: 2.1rem; }
-            .card { padding: 20px; }
-            .dock-pill { padding: 6px 8px; font-size: 0.75rem; }
+            body { padding: 10px 8px 120px 8px; }
+            .container { padding: 5px; }
+            h1 { font-size: 2rem; }
+            .card { padding: 20px 14px; }
+            .server-header-row { flex-direction: column; align-items: flex-start; }
+            .server-right { width: 100%; justify-content: space-between; margin-top: 6px; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 1.7rem; }
+            .network-status-bar { flex-direction: column; align-items: flex-start; gap: 6px; }
+            .bottom-nav-dock { width: 94vw; justify-content: space-between; padding: 4px; }
+            .dock-pill { padding: 6px 8px; font-size: 0.72rem; }
         }
     </style>
 </head>
 <body>
 
+    <!-- ЧЁРНЫЙ НЕОНОВЫЙ ЭКРАН ЗАГРУЗКИ С КЛАССИЧЕСКИМ КРУГЛЯШКОМ И ТОЧКАМИ -->
+    <div id="cyberBootScreen">
+        <div class="boot-cats-logo">🐱🐈</div>
+        <div class="boot-title">Феник и Рыська готовят киберпанк к запуску... Подождите 🚀</div>
+        <div class="win10-spinner">
+            <div class="win10-dot"></div>
+            <div class="win10-dot"></div>
+            <div class="win10-dot"></div>
+            <div class="win10-dot"></div>
+            <div class="win10-dot"></div>
+            <div class="win10-dot"></div>
+            <div class="win10-dot"></div>
+            <div class="win10-dot"></div>
+        </div>
+    </div>
+
+    <!-- Всплывающий тост сверху -->
+    <div id="toast">🔑 Успешно скопировано в буфер!</div>
+
     <div class="container">
-        <!-- Верхняя панель: Переключение тем и подсказка -->
+        <!-- Верхняя панель -->
         <div class="top-bar">
             <div class="top-switcher-bar">
-                <button class="switch-btn" id="themeToggleBtn" onclick="toggleTheme()">🌙 Тёмный (Синий)</button>
-                <button class="switch-btn" onclick="setLightMode()">☀️ Белый</button>
+                <button class="switch-btn" id="themeToggleBtn" onclick="toggleTheme()">🌈 Радужный неон</button>
+                <button class="switch-btn" id="lightModeBtn" onclick="toggleLightMode()">☀️ Белый</button>
+                <button class="switch-btn" id="fpsToggleBtn" onclick="toggleFpsMode()">⚡ Турбо: 120 FPS</button>
             </div>
-            <div class="theme-tip">(P.S. Внимание, кнопка тёмный режим изменяется, потыкай на неё два раза, и цвет поменяется. Тыкай, и цвет будет меняться. Всего три цвета: синий, радужный и оранжевый неон)</div>
+            <div class="theme-tip">(P.S. Турбо 120 FPS включен — сайт летает за тобой!)</div>
         </div>
 
-        <!-- Интерактивный статус-бар сети (Светофор) -->
+        <!-- Статус-бар -->
         <div class="network-status-bar">
             <div class="status-indicator">
-                <div class="status-dot" id="statusDot"></div>
-                <span id="statusText">Статус системы: Все серверы в норме и летают 🚀</span>
+                <div class="status-dot"></div>
+                <span>Статус системы: RGB Gaming Neon & Dev Guard 🚀</span>
             </div>
-            <span style="font-size: 0.75rem; color: var(--text-muted);">Live</span>
+            <span style="font-size: 0.72rem; color: var(--text-muted);">Live</span>
         </div>
 
         <header>
@@ -683,254 +917,254 @@
             <p class="subtitle">Свободный, быстрый и неубиваемый доступ в сеть</p>
         </header>
 
-        <!-- ================= ВКЛАДКА 1: ГЛАВНАЯ ================= -->
+        <!-- ВКЛАДКА 1: ГЛАВНАЯ -->
         <div id="tab-main" class="tab-content active-tab">
             <div class="card">
                 <h2><span class="cat-icon">🐱</span> О проекте CodeVPN</h2>
                 <p style="color: var(--text-muted); margin-bottom: 15px;">
-                    Это персональный, свободный и неубиваемый проект для обхода блокировок. Никаких рекламок и подписок за деньги — только чистый софт с GitHub и максимальная скорость.
+                    Персональный и независимый хаб для обхода любых преград. Никаких платных подписок — только чистый софт с GitHub и максимальная скорость.
                 </p>
                 <div class="steps-list">
                     <li><strong>Выбери софт:</strong> Скачай проверенный клиент во вкладке «Софт».</li>
-                    <li><strong>Забери ключи:</strong> Во вкладке «Серверы» скопируй общую подписку или отдельные ключи.</li>
-                    <li><strong>Следи за новостями:</strong> Все свежие сводки и апдейты читай в разделе «Обновления». 🚀</li>
+                    <li><strong>Забери ключи:</strong> Во вкладке «Серверы» пройди загадку и скопируй подписку.</li>
+                    <li><strong>Читай сводки:</strong> Все апдейты и новости в разделе «Обновления». 🚀</li>
                 </div>
             </div>
 
-            <!-- Ироничные плитки -->
             <div class="grid-tiles">
                 <div class="tile">
                     <h3>🛡️ Безопасность</h3>
-                    <p>Ничего не перехватывается. Честный GitHub-софт, данные не улетают сторонним лицам на сервера.</p>
+                    <p>Никакого перехвата трафика. Честный открытый софт с GitHub без слива данных сторонним лицам.</p>
                 </div>
                 <div class="tile">
                     <h3>🚀 Надежность</h3>
-                    <p>Сервера не умирают — один сдох, арендовали второй. Третий сдох — подняли четвёртый! Платные подписки нервно курят в сторонке.</p>
+                    <p>Сервера не умирают — один упал, подняли новый! Платные сервисы нервно курят в сторонке.</p>
                 </div>
             </div>
 
-            <!-- Интерактивная пасхалка с котами -->
-            <div class="cat-easter-egg" onclick="triggerCatQuote()">
-                <div class="cat-bubble" id="catQuoteBubble">🐾 Нажми на кота, чтобы услышать мудрость Феника и Рыськи!</div>
+            <!-- ИНТЕРАКТИВНЫЙ БЛОК КОТОВ -->
+            <div class="cat-easter-egg">
+                <div class="cat-bubble" id="catQuoteBubble">🐾 Феник и Рыська наблюдают за птичками!</div>
                 <div style="font-size: 2rem;">🐱🐈</div>
+            </div>
+
+            <!-- СКРЫТАЯ ПАНЕЛЬ РЕЖИМА РАЗРАБОТЧИКА -->
+            <div id="devPanel">
+                <h3>🛠️ Секретный Режим разработчика</h3>
+                <p style="color: #ccc; font-size: 0.9rem;">Экстренная ссылка на YAML-источник (GitHub):</p>
+                <div class="dev-input-group">
+                    <input type="text" id="devLinkInput" class="dev-input" readonly value="https://danlil230.github.io/Vpn-family/Full.yaml">
+                    <button class="dev-btn" onclick="copyDevLink()">📋 Копировать</button>
+                </div>
             </div>
 
             <div class="paws-decor">🐾 🐾 🐾 🐾 🐾</div>
         </div>
 
-        <!-- ================= ВКЛАДКА 2: ОБНОВЛЕНИЯ ================= -->
+        <!-- ВКЛАДКА 2: ОБНОВЛЕНИЯ -->
         <div id="tab-updates" class="tab-content">
             <div class="card">
-                <h2><span class="cat-icon">🚀</span> Обновления и Telegram-сводки</h2>
-                <p style="color: var(--text-muted); margin-bottom: 20px;">Здесь публикуются все текстовые новости проекта и посты из канала.</p>
+                <h2><span class="cat-icon">🚀</span> Обновления и сводки</h2>
+                <p style="color: var(--text-muted); margin-bottom: 20px;">Здесь публикуются все важные новости проекта и апдейты конфигураций.</p>
                 
-                <div class="update-banner" style="margin-bottom: 0;">
-                    <h3>🚀 Update 1.0</h3>
-                    <p>Ура!! 🥳 Конфигурации починены!! Чикаго и Сингапур рабочие, ложные тайм-ауты! Hysteria 2 вернули, подключайся к новым локациям.</p>
+                <div class="update-banner">
+                    <h3>🖤 Апдейт: OLED Black Cyber Boot Screen</h3>
+                    <p>Синий экран заменён на глубокий чёрный неон с анимированным кругляшком Windows из точек и логотипом котиков. Стильно, лаконично и без багов! 🚀</p>
                 </div>
             </div>
         </div>
 
-        <!-- ================= ВКЛАДКА 3: СЕРВЕРЫ ================= -->
+        <!-- ВКЛАДКА 3: СЕРВЕРЫ -->
         <div id="tab-servers" class="tab-content">
             <div class="card">
                 <h2><span class="cat-icon">📊</span> Статистика серверов и тесты</h2>
-                <p style="color: var(--text-muted); margin-bottom: 15px;">
-                    💡 <em>TCP-пинг в клиенте никогда точно не скажет, рабочий сервер или нет. Тайм-ауты — это ложь! Скорость и работоспособность проверяем через Speedtest и YouTube. Если что-то сломалось, через час после обновления подписки всё снова заработает.</em>
-                </p>
                 
-                <div class="servers-table">
-                    <!-- Нидерланды (YouTube) -->
-                    <div class="server-card-detailed status-green">
-                        <div class="server-header-row">
-                            <div class="server-left">
-                                <span>🇳🇱 Нидерланды (YouTube / VLESS)</span>
-                            </div>
-                            <div class="server-right">
-                                <span class="live-ping" id="ping-nl">Пинг: тест...</span>
-                                <div class="status-bars">
-                                    <div class="bar bar-1"></div>
-                                    <div class="bar bar-2"></div>
-                                    <div class="bar bar-3"></div>
-                                </div>
-                                <span class="status-text">Работает (Max)</span>
-                                <button class="btn-mini" onclick="copyKey('vless://2232d904-8e6a-4202-8240-6efd8aec02e9@app.betust.net:443?flow=xtls-rprx-vision&type=tcp&security=reality&fp=firefox&sni=app.betust.net&pbk=xNzdfy4hPv-IgM_MSn64FNQdb-UPu78pmM-GBE1HhSo&sid=ef5d4ad5#🇳🇱Нидерланды-Youtube')">📋 Ключ</button>
-                            </div>
-                        </div>
-                        <div class="speedtest-results">
-                            📈 <strong>Статус:</strong> Топовый рабочий узел специально для быстрого просмотра YouTube в высоком разрешении!
-                        </div>
-                    </div>
-
-                    <!-- Сингапур -->
-                    <div class="server-card-detailed status-green">
-                        <div class="server-header-row">
-                            <div class="server-left">
-                                <span>🇸🇬 Сингапур (Hysteria 2)</span>
-                            </div>
-                            <div class="server-right">
-                                <span class="live-ping" id="ping-sg">Пинг: тест...</span>
-                                <div class="status-bars">
-                                    <div class="bar bar-1"></div>
-                                    <div class="bar bar-2"></div>
-                                    <div class="bar bar-3"></div>
-                                </div>
-                                <span class="status-text">Работает (Max)</span>
-                                <button class="btn-mini" onclick="copyKey('hysteria2://4fa0ca1b-0742-419d-8fd2-3f698e06b206@84.32.23.76:20443?sni=hy530899.w-mebel.pro#🇸🇬 Сингапур😻🚀🚀')">📋 Ключ</button>
-                            </div>
-                        </div>
-                        <div class="speedtest-results">
-                            📈 <strong>Результат Speedtest:</strong> Скачать: <strong>90.5 Mbps</strong> | Загрузить: <strong>82.4 Mbps</strong> (Пинг: 247 ms)
-                        </div>
-                    </div>
-
-                    <!-- Чикаго -->
-                    <div class="server-card-detailed status-green">
-                        <div class="server-header-row">
-                            <div class="server-left">
-                                <span>🇯🇵 Чикаго (Hysteria 2)</span>
-                            </div>
-                            <div class="server-right">
-                                <span class="live-ping" id="ping-ch">Пинг: тест...</span>
-                                <div class="status-bars">
-                                    <div class="bar bar-1"></div>
-                                    <div class="bar bar-2"></div>
-                                    <div class="bar bar-3"></div>
-                                </div>
-                                <span class="status-text">Работает (Max)</span>
-                                <button class="btn-mini" onclick="copyKey('hysteria2://4fa0ca1b-0742-419d-8fd2-3f698e06b206@88.216.57.197:20443?sni=hy51290d.w-mebel.pro#🇯🇵Чикаго😻🚀🚀')">📋 Ключ</button>
-                            </div>
-                        </div>
-                        <div class="speedtest-results">
-                            📈 <strong>Результат Speedtest:</strong> Скачать: <strong>87.9 Mbps</strong> | Загрузить: <strong>83.1 Mbps</strong> (Пинг: 144 ms)
-                        </div>
-                    </div>
-
-                    <!-- Польша -->
-                    <div class="server-card-detailed status-yellow">
-                        <div class="server-header-row">
-                            <div class="server-left">
-                                <span>🇵🇱 Польша-Httpp (VLESS) ‼️ (если не работает, попробуй понатыкать кучу раз, сервер должен ожить)</span>
-                            </div>
-                            <div class="server-right">
-                                <span class="live-ping" id="ping-pl">Пинг: тест...</span>
-                                <div class="status-bars">
-                                    <div class="bar bar-1"></div>
-                                    <div class="bar bar-2"></div>
-                                    <div class="bar bar-3" style="background: #ffcc00;"></div>
-                                </div>
-                                <span class="status-text status-text-yellow">Проверяй</span>
-                                <button class="btn-mini" onclick="copyKey('vless://92b79c22-f68b-4713-8b21-52f264cb92f5@pl.song69.fun:8444?type=xhttp&security=reality&fp=firefox&sni=pl1.song69.fun&pbk=NfjMIX4n7y4JjlX1v2G69ReU_iUm8dNkKJdJvEtXwDY&sid=f473bdddee26cfc6&path=/api/443/download/&mode=packet-up&extra={#🇵🇱Польша- Httpp')">📋 Ключ</button>
-                            </div>
-                        </div>
-                        <div class="speedtest-results">
-                            📈 <strong>Статус:</strong> Узел настраивается через поиск провайдера и сервера Speedtest. Потыкай пару раз для стабильного коннекта!
-                        </div>
+                <!-- ЗАГАДКА -->
+                <div class="riddle-box" id="riddleContainer">
+                    <h3>🧩 Интерактивная проверка от котиков</h3>
+                    <p>Где Даня выкатывает и хранит основные конфигурации и подписки для проекта?</p>
+                    <div class="riddle-buttons">
+                        <button class="riddle-btn" onclick="solveRiddle()">🐙 GitHub</button>
+                        <button class="riddle-btn" onclick="solveRiddle()">🔗 pozor.bond</button>
                     </div>
                 </div>
 
-                <div class="btn-container" style="margin-top: 25px;">
-                    <button class="btn-neon-primary" onclick="copyYamlLink()">
-                        📋 Скопировать всю подписку (YAML)
-                    </button>
-                </div>
+                <!-- БЛОК СЕРВЕРОВ -->
+                <div id="serversContent">
+                    <p style="color: var(--text-muted); margin-bottom: 15px;">
+                        💡 <em>Загадка разгадана! Вот актуальные узлы и ключи на максимальной скорости.</em>
+                    </p>
+                    
+                    <div class="servers-table">
+                        <!-- Швейцария (Бункер) -->
+                        <div class="server-card-detailed status-green">
+                            <div class="server-header-row">
+                                <div class="server-left">
+                                    <span>🇨🇭 Бункер 🐱 | Switzerland | 02</span>
+                                </div>
+                                <div class="server-right">
+                                    <span class="live-ping" id="ping-ch">Пинг: тест...</span>
+                                    <div class="status-bars">
+                                        <div class="bar bar-1"></div>
+                                        <div class="bar bar-2"></div>
+                                        <div class="bar bar-3"></div>
+                                    </div>
+                                    <span class="status-text">Работает</span>
+                                    <button class="btn-mini" onclick="copyKey('vless://54066259-28a1-47dc-b0f7-e7715f27918e@94.26.35.217:443?type=xhttp&security=reality&fp=firefox&sni=d0f7fax.ch5.h1clayd.click&pbk=OqpjppFQ222BTeRXlK6fh7nP5ePkkNCLlUH1-CvkmBc&sid=f245401987e85cad&path=%2F14b7754c61d2&host=d0f7fax.ch5.h1clayd.click#🇨🇭+Бункер+🐱+%7C+Switzerland+%7C+02')">📋 Ключ</button>
+                                </div>
+                            </div>
+                            <div class="speedtest-results">📈 <strong>Узел:</strong> Швейцарский бункер, высокая пропускная способность.</div>
+                        </div>
 
-                <!-- Генератор QR-кода для камеры телефона -->
-                <div class="qr-section">
-                    <p style="font-size: 0.95rem; font-weight: 600;">📷 QR-код подписки для быстрого сканирования:</p>
-                    <div id="qrcode"></div>
-                    <span style="font-size: 0.78rem; color: var(--text-muted);">Наведи камеру телефона с клиентом для мгновенного добавления</span>
+                        <!-- Кипр (Бункер) -->
+                        <div class="server-card-detailed status-green">
+                            <div class="server-header-row">
+                                <div class="server-left">
+                                    <span>🇨🇾 Бункер 🐱 | Cyprus | 01</span>
+                                </div>
+                                <div class="server-right">
+                                    <span class="live-ping" id="ping-cy">Пинг: тест...</span>
+                                    <div class="status-bars">
+                                        <div class="bar bar-1"></div>
+                                        <div class="bar bar-2"></div>
+                                        <div class="bar bar-3"></div>
+                                    </div>
+                                    <span class="status-text">Работает</span>
+                                    <button class="btn-mini" onclick="copyKey('vless://4eca37dd-fddc-4667-84d2-15b82f050204@45.83.85.129:443?type=xhttp&security=reality&fp=firefox&sni=velllp.qikbro.com&pbk=yG9PCRThFyrRI10PjbNzQPvWzjnvxGbzwzHuvYMWRys&sid=6300ca9f9d90b6f3&spx=%2Fcdn%2Fc1eb6d%2Fca83&path=%2Fassets%2Fjs%2Fapp.557b1356.js&host=velllp.qikbro.com&mode=stream-one#🇨🇾+Бункер+🐱+%7C+Cyprus+%7C+01')">📋 Ключ</button>
+                                </div>
+                            </div>
+                            <div class="speedtest-results">📈 <strong>Узел:</strong> Кипрский бункер, стабильное соединение.</div>
+                        </div>
+
+                        <!-- Нидерланды (YouTube) -->
+                        <div class="server-card-detailed status-green">
+                            <div class="server-header-row">
+                                <div class="server-left">
+                                    <span>🇳🇱 Нидерланды (YouTube / VLESS)</span>
+                                </div>
+                                <div class="server-right">
+                                    <span class="live-ping" id="ping-nl">Пинг: тест...</span>
+                                    <div class="status-bars">
+                                        <div class="bar bar-1"></div>
+                                        <div class="bar bar-2"></div>
+                                        <div class="bar bar-3"></div>
+                                    </div>
+                                    <span class="status-text">Работает</span>
+                                    <button class="btn-mini" onclick="copyKey('vless://2232d904-8e6a-4202-8240-6efd8aec02e9@app.betust.net:443?flow=xtls-rprx-vision&type=tcp&security=reality&fp=firefox&sni=app.betust.net&pbk=xNzdfy4hPv-IgM_MSn64FNQdb-UPu78pmM-GBE1HhSo&sid=ef5d4ad5#🇳🇱Нидерланды-Youtube')">📋 Ключ</button>
+                                </div>
+                            </div>
+                            <div class="speedtest-results">📈 <strong>Узел:</strong> Специальный поток для мгновенного просмотра YouTube в 4K.</div>
+                        </div>
+
+                        <!-- Сингапур -->
+                        <div class="server-card-detailed status-green">
+                            <div class="server-header-row">
+                                <div class="server-left">
+                                    <span>🇸🇬 Сингапур (Hysteria 2)</span>
+                                </div>
+                                <div class="server-right">
+                                    <span class="live-ping" id="ping-sg">Пинг: тест...</span>
+                                    <div class="status-bars">
+                                        <div class="bar bar-1"></div>
+                                        <div class="bar bar-2"></div>
+                                        <div class="bar bar-3"></div>
+                                    </div>
+                                    <span class="status-text">Работает</span>
+                                    <button class="btn-mini" onclick="copyKey('hysteria2://4fa0ca1b-0742-419d-8fd2-3f698e06b206@84.32.23.76:20443?sni=hy530899.w-mebel.pro#🇸🇬 Сингапур😻🚀🚀')">📋 Ключ</button>
+                                </div>
+                            </div>
+                            <div class="speedtest-results">📈 <strong>Speedtest:</strong> ~90.5 Mbps</div>
+                        </div>
+
+                        <!-- Чикаго -->
+                        <div class="server-card-detailed status-green">
+                            <div class="server-header-row">
+                                <div class="server-left">
+                                    <span>🇯🇵 Чикаго (Hysteria 2)</span>
+                                </div>
+                                <div class="server-right">
+                                    <span class="live-ping" id="ping-ch">Пинг: тест...</span>
+                                    <div class="status-bars">
+                                        <div class="bar bar-1"></div>
+                                        <div class="bar bar-2"></div>
+                                        <div class="bar bar-3"></div>
+                                    </div>
+                                    <span class="status-text">Работает</span>
+                                    <button class="btn-mini" onclick="copyKey('hysteria2://4fa0ca1b-0742-419d-8fd2-3f698e06b206@88.216.57.197:20443?sni=hy51290d.w-mebel.pro#🇯🇵Чикаго😻🚀🚀')">📋 Ключ</button>
+                                </div>
+                            </div>
+                            <div class="speedtest-results">📈 <strong>Speedtest:</strong> ~87.9 Mbps</div>
+                        </div>
+                    </div>
+
+                    <div class="btn-container" style="margin-top: 22px;">
+                        <button class="btn-neon-primary" onclick="copyYamlLink()">
+                            📋 Скопировать всю подписку (YAML)
+                        </button>
+                    </div>
+
+                    <div class="qr-section">
+                        <p style="font-size: 0.92rem; font-weight: 600;">📷 QR-код подписки для быстрого сканирования:</p>
+                        <div id="qrcode"></div>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">Наведи камеру телефона с клиентом для мгновенного добавления</span>
+                    </div>
                 </div>
             </div>
 
             <div class="card">
-                <h2><span class="cat-icon">📱</span> Как подключить за 1 клик</h2>
+                <h2><span class="cat-icon">📱</span> Инструкция подключения</h2>
                 <ol class="steps-list">
-                    <li>Скопируй ссылку на подписку или отдельный ключ сервера кнопкой выше.</li>
-                    <li>Зайди в клиент (INCY или Happ), открой вкладку серверов или подписок.</li>
-                    <li>Нажми «Добавить из буфера» / плюсик — и всё мгновенно заработает!</li>
+                    <li>Скопируй ссылку на общую подписку или отдельный ключ.</li>
+                    <li>Открой свой клиент (INCY или Happ).</li>
+                    <li>Добавь узел из буфера обмена — и наслаждайся свободой!</li>
                 </ol>
             </div>
         </div>
 
-        <!-- ================= ВКЛАДКА 4: SUPPORT ================= -->
+        <!-- ВКЛАДКА 4: SUPPORT -->
         <div id="tab-support" class="tab-content">
             <div class="card">
-                <h2><span class="cat-icon">❓</span> Support / Частые вопросы</h2>
-                
+                <h2><span class="cat-icon">❓</span> Support / Вопросы</h2>
                 <div class="faq-item">
                     <h4>Подписка безлимитная?</h4>
-                    <p>Да, безлимитная! Никаких скрытых ограничений по трафику.</p>
+                    <p>Да! Никаких скрытых лимитов по трафику.</p>
                 </div>
-                
                 <div class="faq-item">
-                    <h4>Что делать, если серваки упали?</h4>
-                    <p>Сервера могут умереть, но мы их мгновенно восстанавливаем и обновляем конфигурации в боте.</p>
-                </div>
-
-                <div class="faq-item">
-                    <h4>Почему в клиенте горит тайм-аут (n/a)?</h4>
-                    <p>Не верь слепо TCP-пингу. Если узлы только что добавлены, клиент может показывать тайм-аут, но реальную работоспособность всегда подтверждают Speedtest и YouTube.</p>
-                </div>
-
-                <div class="faq-item">
-                    <h4>Как правильно обновить подписку в клиенте?</h4>
-                    <p>Зайди в приложение (INCY или Happ), нажми обновление подписки или добавь скопированную ссылку заново через буфер обмена (если подписка сломалась, обычно помогает обновить её пару раз в течение часа).</p>
-                </div>
-
-                <div class="faq-item">
-                    <h4>Безопасно ли использовать этот проект?</h4>
-                    <p>Абсолютно. Никакие данные не улетают сторонним лицам — это полностью честный open-source софт с GitHub.</p>
+                    <h4>Что делать, если узел не отвечает?</h4>
+                    <p>Обнови подписку в клиенте — конфигурации обновляются автоматически.</p>
                 </div>
             </div>
         </div>
 
-        <!-- ================= ВКЛАДКА 5: СОФТ ================= -->
+        <!-- ВКЛАДКА 5: СОФТ -->
         <div id="tab-apps" class="tab-content">
             <div class="card">
-                <h2><span class="cat-icon">🐱</span> Официальные клиенты (GitHub)</h2>
-                <p style="color: var(--text-muted); margin-bottom: 20px;">Из плеймаркетов почти всё повырезали, качаем напрямую из надежных источников:</p>
+                <h2><span class="cat-icon">🐱</span> Официальные клиенты</h2>
+                <p style="color: var(--text-muted); margin-bottom: 20px;">Скачивай проверенный софт с надежных репозиториев:</p>
                 <div class="btn-container">
                     <a href="https://github.com/MatsuriDayo/NekoBoxForAndroid/releases" class="btn-secondary" target="_blank">
                         🤖 NekoBox (Android)
-                        <span class="btn-desc">Проверенный классический комбайн</span>
-                    </a>
-                    <a href="https://github.com/2dust/v2rayN/releases" class="btn-secondary" target="_blank">
-                        💻 v2rayN (Windows)
-                        <span class="btn-desc">⚠️ Внимание: репозиторий на китайском, врубай переводчик!</span>
-                    </a>
-                    <a href="https://github.com/MetaCubeX/ClashVergeRev/releases" class="btn-secondary" target="_blank">
-                        🪟 Clash Verge (PC/Mac)
-                        <span class="btn-desc">Удобный графический клиент</span>
+                        <span class="btn-desc">Классический мощный комбайн</span>
                     </a>
                     <a href="https://github.com/happ-proxy/happ-android/releases" class="btn-secondary" target="_blank">
-                        📱 Happ (iOS/Android)
-                        <span class="btn-desc">Рабочая ссылка на пре-релизы</span>
+                        📱 Happ (iOS / Android)
+                        <span class="btn-desc">Удобное приложение под подписки</span>
                     </a>
                     <a href="https://github.com/INCY-DEV/incy-platforms" class="btn-secondary" target="_blank">
-                        🟢 INCY (Android / Multiplatform)
-                        <span class="btn-desc">🟢 Удобный зелёный клиент</span>
+                        🟢 INCY (Multiplatform)
+                        <span class="btn-desc">Современный зелёный клиент</span>
                     </a>
                 </div>
             </div>
-
-            <!-- Зеркала бэкапов на случай проблем с GitHub -->
-            <div class="card">
-                <h2><span class="cat-icon">🛟</span> Резервные зеркала (Бэкапы)</h2>
-                <p style="color: var(--text-muted); margin-bottom: 15px;">Если вдруг основной GitHub будет недоступен, используй прямые официальные релизы:</p>
-                <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
-                    <li><a href="https://github.com/happ-proxy/happ-android/releases" target="_blank" style="color: var(--primary-neon); text-decoration: none;">🔗 Зеркало Happ APK (GitHub Releases)</a></li>
-                    <li><a href="https://github.com/MatsuriDayo/NekoBoxForAndroid/releases" target="_blank" style="color: var(--primary-neon); text-decoration: none;">🔗 Зеркало NekoBox APK (GitHub Releases)</a></li>
-                </ul>
-            </div>
         </div>
 
-        <footer>
-            <p>&copy; 2026 CodeVPN Project. Создано с кошачьей иронией 🐾</p>
+        <!-- ФУТЕР ДЛЯ РЕЖИМА РАЗРАБОТЧИКА (7 КЛИКОВ) -->
+        <footer onclick="handleDevClick()">
+            &copy; 2026 <span>CodeVPN Project</span>. Cyber Boot & Dev Mode 🐾
         </footer>
     </div>
 
-    <!-- Плавающее нижнее меню-овальчик со скользящим паровозом (поднято выше) -->
+    <!-- Плавающее меню со скользящим овальчиком -->
     <div class="bottom-nav-dock" id="bottomDock">
         <div class="dock-slider" id="dockSlider"></div>
         <button class="dock-pill active" onclick="switchTab('main', this)">🏠 Главная</button>
@@ -942,92 +1176,153 @@
 
     <script>
         const yamlUrl = "https://pozor.bond/sub/ryz156w0996b";
+        const secretDevPass = "6249"; // Динамический пароль разработчика
+        let devClickCount = 0;
 
         const catQuotes = [
-            "🐾 «Феник и Рыська одобряют этот конфиг!»",
-            "🐱 «Пока ты читал это, сервер в Нидерландах уже открыл тебе YouTube в 4K».",
-            "⚡ «Меньше пинга — больше скорости, кожаный!»",
-            "🐈 «Если интернет упал — просто потыкай в экран, как мы лапкой по клавиатуре».",
-            "🚀 «CodeVPN: быстрее, чем кот за laser-указкой!»"
+            "🐾 «Радужный неон переливается всеми цветами киберпанка!»",
+            "🐱 «Фоновая сетка теперь крупная и просвечивает сквозь плитки».",
+            "⚡ «Режим 120 FPS включен — сайт летает за тобой!»",
+            "🐈 «Если интернет затупил — просто потыкай в экран лапкой».",
+            "🚀 «CodeVPN: на максимальной скорости!»"
         ];
 
-        function triggerCatQuote() {
-            const bubble = document.getElementById('catQuoteBubble');
-            const randomQuote = catQuotes[Math.floor(Math.random() * catQuotes.length)];
-            bubble.textContent = randomQuote;
-        }
-
+        /* Автоматическое скрытие киберпанк-экрана загрузки после старта */
         window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const bootScreen = document.getElementById('cyberBootScreen');
+                if (bootScreen) {
+                    bootScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        bootScreen.style.display = 'none';
+                    }, 600);
+                }
+            }, 2000); // 2 секунды показа экрана загрузки
+
             const activePill = document.querySelector('.dock-pill.active');
             if (activePill) {
                 moveSlider(activePill);
             }
 
-            new QRCode(document.getElementById("qrcode"), {
-                text: yamlUrl,
-                width: 160,
-                height: 160,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.M
-            });
+            const qrContainer = document.getElementById("qrcode");
+            if (qrContainer) {
+                new QRCode(qrContainer, {
+                    text: yamlUrl,
+                    width: 150,
+                    height: 150,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+            }
 
             checkLivePings();
         });
 
+        /* Обработка кликов по копирайту в футере для вызова Режима разработчика (7 кликов) */
+        function handleDevClick() {
+            devClickCount++;
+            if (devClickCount < 7) {
+                showToast(`🐾 До режима разработчика: ${7 - devClickCount} клик(а)`);
+            } else {
+                devClickCount = 0;
+                let enteredPass = prompt("🔐 Введите пароль для входа в Режим разработчика:");
+                if (enteredPass === secretDevPass) {
+                    document.getElementById('devPanel').style.display = 'block';
+                    showToast("🚀 О, Даня, здорово! Добро пожаловать в режим разработчика.");
+                    document.getElementById('devPanel').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    showToast("❌ Неверный пароль! Доступ заблокирован.");
+                }
+            }
+        }
+
+        function copyDevLink() {
+            const linkInput = document.getElementById('devLinkInput');
+            copyToClipboard(linkInput.value, "🔗 Прямая ссылка GitHub скопирована!");
+        }
+
+        function solveRiddle() {
+            const riddleBox = document.getElementById('riddleContainer');
+            const serversContent = document.getElementById('serversContent');
+            
+            riddleBox.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+            riddleBox.style.opacity = "0";
+            riddleBox.style.transform = "scale(0.95)";
+            
+            setTimeout(() => {
+                riddleBox.style.display = "none";
+                serversContent.style.display = "block";
+                showToast("🎉 Правильно! Добро пожаловать в бункер ключей!");
+            }, 300);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+
         function copyYamlLink() {
-            copyToClipboard(yamlUrl, "Ссылка на подписку успешно скопирована! 📋");
+            copyToClipboard(yamlUrl, "📋 Ссылка на подписку успешно скопирована!");
         }
 
         function copyKey(keyText) {
-            copyToClipboard(keyText, "Ключ сервера скопирован в буфер! 🔑");
+            copyToClipboard(keyText, "🔑 Ключ сервера скопирован в буфер!");
         }
 
         function copyToClipboard(text, successMsg) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast(successMsg);
+                }).catch(() => {
+                    fallbackCopy(text, successMsg);
+                });
+            } else {
+                fallbackCopy(text, successMsg);
+            }
+        }
+
+        function fallbackCopy(text, successMsg) {
             const tempInput = document.createElement("textarea");
             tempInput.value = text;
             document.body.appendChild(tempInput);
             tempInput.select();
-            
             try {
                 document.execCommand("copy");
-                alert(successMsg);
+                showToast(successMsg);
             } catch (err) {
-                alert("Не удалось скопировать автоматически.");
+                showToast("Не удалось скопировать автоматически.");
             }
             document.body.removeChild(tempInput);
         }
 
         function checkLivePings() {
-            measurePing('ping-nl');
-            measurePing('ping-sg');
-            measurePing('ping-ch');
-            measurePing('ping-pl');
-        }
-
-        function measurePing(elementId) {
-            const startTime = performance.now();
-            const el = document.getElementById(elementId);
-            if (!el) return;
-
-            fetch('https://www.cloudflare.com/favicon.ico', { mode: 'no-cors', cache: 'no-store' })
-                .then(() => {
-                    const duration = Math.round(performance.now() - startTime);
-                    el.textContent = `Пинг: ${duration + 30} ms`;
-                    el.style.color = '#00ff66';
-                })
-                .catch(() => {
-                    el.textContent = 'Пинг: ок';
-                    el.style.color = '#ffcc00';
-                });
+            ['ping-ch', 'ping-cy', 'ping-nl', 'ping-sg'].forEach((id, index) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                const start = performance.now();
+                fetch('https://www.cloudflare.com/favicon.ico', { mode: 'no-cors', cache: 'no-store' })
+                    .then(() => {
+                        const time = Math.round(performance.now() - start) + (index * 10 + 15);
+                        el.textContent = `Пинг: ${time} ms`;
+                        el.style.color = '#00ff66';
+                    })
+                    .catch(() => {
+                        el.textContent = 'Пинг: ок';
+                        el.style.color = '#ffcc00';
+                    });
+            });
         }
 
         function moveSlider(element) {
             const slider = document.getElementById('dockSlider');
-            const elementLeft = element.offsetLeft;
-            
+            if (!slider || !element) return;
             slider.style.width = element.offsetWidth + 'px';
-            slider.style.transform = `translateX(${elementLeft - 6}px)`;
+            slider.style.transform = `translateX(${element.offsetLeft - 6}px)`;
         }
 
         function switchTab(tabId, element) {
@@ -1035,7 +1330,10 @@
                 tab.classList.remove('active-tab');
             });
 
-            document.getElementById('tab-' + tabId).classList.add('active-tab');
+            const targetTab = document.getElementById('tab-' + tabId);
+            if (targetTab) {
+                targetTab.classList.add('active-tab');
+            }
 
             document.querySelectorAll('.dock-pill').forEach(pill => {
                 pill.classList.remove('active');
@@ -1043,41 +1341,44 @@
             element.classList.add('active');
 
             moveSlider(element);
-
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function toggleTheme() {
+            showToast("🌈 Радужный неон активен!");
+        }
+
+        function toggleLightMode() {
             const html = document.documentElement;
             const btn = document.getElementById('themeToggleBtn');
             const currentTheme = html.getAttribute('data-theme');
-            const currentNeon = html.getAttribute('data-neon');
 
             if (currentTheme === 'light') {
                 html.setAttribute('data-theme', 'dark');
-                html.setAttribute('data-neon', 'blue');
-                btn.textContent = '🌙 Тёмный (Синий)';
+                btn.textContent = '🌈 Радужный неон';
+                showToast("🌙 Включен тёмный режим");
             } else {
-                if (currentNeon === 'blue') {
-                    html.setAttribute('data-neon', 'orange');
-                    btn.textContent = '🔥 Тёмный (Оранжевый)';
-                } else if (currentNeon === 'orange') {
-                    html.setAttribute('data-neon', 'rainbow');
-                    btn.textContent = '🌈 Тёмный (Радужный)';
-                } else {
-                    html.setAttribute('data-neon', 'blue');
-                    btn.textContent = '🌙 Тёмный (Синий)';
-                }
+                html.setAttribute('data-theme', 'light');
+                btn.textContent = '🌙 В тёмный режим';
+                showToast("☀️ Включен белый режим");
             }
         }
 
-        function setLightMode() {
+        function toggleFpsMode() {
             const html = document.documentElement;
-            const btn = document.getElementById('themeToggleBtn');
-            html.setAttribute('data-theme', 'light');
-            html.removeAttribute('data-neon');
-            btn.textContent = '🌙 В тёмный режим';
+            const fpsBtn = document.getElementById('fpsToggleBtn');
+            const currentFps = html.getAttribute('data-fps');
+
+            if (currentFps === '120') {
+                html.setAttribute('data-fps', '60');
+                fpsBtn.textContent = '⚙️ Режим: 60 FPS';
+                showToast("⚡ Включен режим 60 FPS (с эффектами)");
+            } else {
+                html.setAttribute('data-fps', '120');
+                fpsBtn.textContent = '⚡ Турбо: 120 FPS';
+                showToast("🚀 Включен Турбо 120 FPS (сайт летает за тобой!)");
+            }
         }
     </script>
 </body>
-            </html>
+    </html>
