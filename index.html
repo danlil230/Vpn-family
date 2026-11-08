@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru" data-theme="dark" data-neon="rainbow" data-fps="120">
+<html lang="ru" data-theme="dark" data-neon="rainbow">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeVPN — Cyber Boot Edition</title>
+    <title>CodeVPN — Ultimate 120 FPS Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <!-- QR Code Generator -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -50,7 +50,6 @@
             max-width: 320px;
         }
 
-        /* Классический кругляшок Windows 10 с точками */
         .win10-spinner {
             width: 50px;
             height: 50px;
@@ -73,7 +72,6 @@
             box-shadow: 0 0 8px #00f0ff;
         }
 
-        /* Расставляем 8 точек по кругу (как в Windows 10) */
         .win10-dot:nth-child(1) { top: 0; left: 21px; }
         .win10-dot:nth-child(2) { top: 6px; left: 38px; }
         .win10-dot:nth-child(3) { top: 21px; left: 44px; }
@@ -82,6 +80,83 @@
         .win10-dot:nth-child(6) { top: 38px; left: 6px; }
         .win10-dot:nth-child(7) { top: 21px; left: 0; }
         .win10-dot:nth-child(8) { top: 6px; left: 6px; }
+
+        /* ========================================== */
+        /* ФИРМЕННЫЙ ЗОЛОТОЙ ЭКРАН КРАША (NO SIGNAL)   */
+        /* ========================================== */
+        #goldCrashScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            color: #000000;
+            z-index: 999999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+        }
+
+        #goldCrashScreen h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        #goldCrashScreen p {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .crash-progress-container {
+            width: 300px;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+            overflow: hidden;
+            border: 2px solid #000;
+        }
+
+        .crash-progress-bar {
+            width: 0%;
+            height: 100%;
+            background: #000;
+            transition: width 0.05s linear;
+        }
+
+        /* Эффект старого телевизора / No Signal Overshow */
+        .nosignal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.15), rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .nosignal-overlay.active {
+            opacity: 1;
+            animation: glitchEffect 0.2s infinite;
+        }
+
+        @keyframes glitchEffect {
+            0% { transform: translate(0, 0); }
+            20% { transform: translate(-5px, 5px); }
+            40% { transform: translate(5px, -5px); }
+            60% { transform: translate(-3px, -3px); }
+            80% { transform: translate(3px, 3px); }
+            100% { transform: translate(0, 0); }
+        }
 
         /* ========================================== */
         /* РАДУЖНЫЙ НЕОН + ПРОЗРАЧНОЕ МАТОВОЕ СТЕКЛО  */
@@ -125,14 +200,6 @@
             --glow: 0 8px 30px rgba(99, 102, 241, 0.15);
             --gradient: linear-gradient(135deg, #6366f1, #ec4899, #06b6d4);
             --grid-color: rgba(99, 102, 241, 0.05);
-        }
-
-        :root[data-fps="120"] * {
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-            box-shadow: none !important;
-            transition: none !important;
-            animation: none !important;
         }
 
         * {
@@ -870,7 +937,7 @@
 </head>
 <body>
 
-    <!-- ЧЁРНЫЙ НЕОНОВЫЙ ЭКРАН ЗАГРУЗКИ С КЛАССИЧЕСКИМ КРУГЛЯШКОМ И ТОЧКАМИ -->
+    <!-- ЭКРАН ЗАГРУЗКИ (CYBER BOOT) -->
     <div id="cyberBootScreen">
         <div class="boot-cats-logo">🐱🐈</div>
         <div class="boot-title">Феник и Рыська готовят киберпанк к запуску... Подождите 🚀</div>
@@ -886,25 +953,38 @@
         </div>
     </div>
 
+    <!-- ФИРМЕННЫЙ ЗОЛОТОЙ ЭКРАН КРАША С ПРОЦЕНТАМИ И NO SIGNAL -->
+    <div id="goldCrashScreen">
+        <div class="nosignal-overlay" id="noSignalOverlay"></div>
+        <div style="position: relative; z-index: 2;">
+            <h1>⚠️ Упс, твой браузер затупил</h1>
+            <p>Погоди, отправляемся в экстренную перезагрузку...</p>
+            <div style="font-size: 2rem; font-family: 'Fira Code', monospace; font-weight: 800; margin-bottom: 20px;" id="crashPercent">0%</div>
+            <div class="crash-progress-container">
+                <div class="crash-progress-bar" id="crashProgressBar"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Всплывающий тост сверху -->
     <div id="toast">🔑 Успешно скопировано в буфер!</div>
 
     <div class="container">
-        <!-- Верхняя панель -->
+        <!-- Верхняя панель (Только Турбо 120 FPS без тормозящих 60 FPS) -->
         <div class="top-bar">
             <div class="top-switcher-bar">
                 <button class="switch-btn" id="themeToggleBtn" onclick="toggleTheme()">🌈 Радужный неон</button>
                 <button class="switch-btn" id="lightModeBtn" onclick="toggleLightMode()">☀️ Белый</button>
-                <button class="switch-btn" id="fpsToggleBtn" onclick="toggleFpsMode()">⚡ Турбо: 120 FPS</button>
+                <button class="switch-btn" onclick="triggerCrashScreen()">⚠️ Симуляция затупа</button>
             </div>
-            <div class="theme-tip">(P.S. Турбо 120 FPS включен — сайт летает за тобой!)</div>
+            <div class="theme-tip">(P.S. Режим Турбо 120 FPS активен постоянно — сайт летает за тобой!)</div>
         </div>
 
         <!-- Статус-бар -->
         <div class="network-status-bar">
             <div class="status-indicator">
                 <div class="status-dot"></div>
-                <span>Статус системы: RGB Gaming Neon & Dev Guard 🚀</span>
+                <span>Статус системы: RGB Gaming Neon & Crash Guard 🚀</span>
             </div>
             <span style="font-size: 0.72rem; color: var(--text-muted);">Live</span>
         </div>
@@ -942,7 +1022,6 @@
                 </div>
             </div>
 
-            <!-- ИНТЕРАКТИВНЫЙ БЛОК КОТОВ -->
             <div class="cat-easter-egg">
                 <div class="cat-bubble" id="catQuoteBubble">🐾 Феник и Рыська наблюдают за птичками!</div>
                 <div style="font-size: 2rem;">🐱🐈</div>
@@ -968,8 +1047,8 @@
                 <p style="color: var(--text-muted); margin-bottom: 20px;">Здесь публикуются все важные новости проекта и апдейты конфигураций.</p>
                 
                 <div class="update-banner">
-                    <h3>🖤 Апдейт: OLED Black Cyber Boot Screen</h3>
-                    <p>Синий экран заменён на глубокий чёрный неон с анимированным кругляшком Windows из точек и логотипом котиков. Стильно, лаконично и без багов! 🚀</p>
+                    <h3>🏆 Апдейт: Умный Золотой Экран Затупа</h3>
+                    <p>Медленный режим 60 FPS полностью удален, чтобы исключить лаги. Добавлен золотой экран авто-краша с процентами и No Signal Overshow эффектом перед перезагрузкой! 🚀</p>
                 </div>
             </div>
         </div>
@@ -1160,7 +1239,7 @@
 
         <!-- ФУТЕР ДЛЯ РЕЖИМА РАЗРАБОТЧИКА (7 КЛИКОВ) -->
         <footer onclick="handleDevClick()">
-            &copy; 2026 <span>CodeVPN Project</span>. Cyber Boot & Dev Mode 🐾
+            &copy; 2026 <span>CodeVPN Project</span>. Turbo 120 FPS & Dev Mode 🐾
         </footer>
     </div>
 
@@ -1176,18 +1255,18 @@
 
     <script>
         const yamlUrl = "https://pozor.bond/sub/ryz156w0996b";
-        const secretDevPass = "6249"; // Динамический пароль разработчика
+        const secretDevPass = "9142"; // Динамический пароль разработчика
         let devClickCount = 0;
 
         const catQuotes = [
             "🐾 «Радужный неон переливается всеми цветами киберпанка!»",
             "🐱 «Фоновая сетка теперь крупная и просвечивает сквозь плитки».",
-            "⚡ «Режим 120 FPS включен — сайт летает за тобой!»",
-            "🐈 «Если интернет затупил — просто потыкай в экран лапкой».",
-            "🚀 «CodeVPN: на максимальной скорости!»"
+            "⚡ «Турбо 120 FPS на максимум — сайт летает за тобой!»",
+            "🐈 «Если интернет затупил — золото-краш экран всё исправит».",
+            "🚀 «CodeVPN: без лагов и тормозов!»"
         ];
 
-        /* Автоматическое скрытие киберпанк-экрана загрузки после старта */
+        /* Автоматическое скрытие киберпанк-экрана загрузки */
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 const bootScreen = document.getElementById('cyberBootScreen');
@@ -1197,7 +1276,7 @@
                         bootScreen.style.display = 'none';
                     }, 600);
                 }
-            }, 2000); // 2 секунды показа экрана загрузки
+            }, 1800);
 
             const activePill = document.querySelector('.dock-pill.active');
             if (activePill) {
@@ -1217,7 +1296,55 @@
             }
 
             checkLivePings();
+
+            /* Интеллектуальный детектор лагов и зависаний браузера (триггер золотого экрана) */
+            let lastTime = performance.now();
+            let freezeCounter = 0;
+            function checkBrowserLag() {
+                const now = performance.now();
+                const delta = now - lastTime;
+                lastTime = now;
+                // Если поток подвис больше чем на 400 мс (браузер реально затупил или завис)
+                if (delta > 400) {
+                    freezeCounter++;
+                    if (freezeCounter >= 2) { // Если затуп повторился
+                        triggerCrashScreen();
+                        return;
+                    }
+                } else {
+                    if (freezeCounter > 0) freezeCounter--;
+                }
+                requestAnimationFrame(checkBrowserLag);
+            }
+            requestAnimationFrame(checkBrowserLag);
         });
+
+        /* Функция симуляции/активации золотого экрана затупа с процентами и No Signal */
+        function triggerCrashScreen() {
+            const crashScreen = document.getElementById('goldCrashScreen');
+            const progressBar = document.getElementById('crashProgressBar');
+            const percentText = document.getElementById('crashPercent');
+            const overlay = document.getElementById('noSignalOverlay');
+            
+            crashScreen.style.display = 'flex';
+            
+            let currentPercent = 0;
+            const interval = setInterval(() => {
+                currentPercent += 2;
+                if (currentPercent > 100) currentPercent = 100;
+                percentText.textContent = currentPercent + '%';
+                progressBar.style.width = currentPercent + '%';
+
+                if (currentPercent === 100) {
+                    clearInterval(interval);
+                    overlay.classList.add('active'); // Вспышка No Signal Overshow
+                    showToast("⚡ Перезагрузка системы...");
+                    setTimeout(() => {
+                        window.location.reload(); // Автоперезагрузка страницы
+                    }, 800);
+                }
+            }, 100); // 100мс * 50 шагов = ровно 5 секунд работы экрана
+        }
 
         /* Обработка кликов по копирайту в футере для вызова Режима разработчика (7 кликов) */
         function handleDevClick() {
@@ -1326,9 +1453,9 @@
         }
 
         function switchTab(tabId, element) {
-            document.querySelectorAll('.tab-content').forEach(tab => {
+            document.querySelectorAll('.tab-content').forEach, tab => {
                 tab.classList.remove('active-tab');
-            });
+            };
 
             const targetTab = document.getElementById('tab-' + tabId);
             if (targetTab) {
@@ -1361,22 +1488,6 @@
                 html.setAttribute('data-theme', 'light');
                 btn.textContent = '🌙 В тёмный режим';
                 showToast("☀️ Включен белый режим");
-            }
-        }
-
-        function toggleFpsMode() {
-            const html = document.documentElement;
-            const fpsBtn = document.getElementById('fpsToggleBtn');
-            const currentFps = html.getAttribute('data-fps');
-
-            if (currentFps === '120') {
-                html.setAttribute('data-fps', '60');
-                fpsBtn.textContent = '⚙️ Режим: 60 FPS';
-                showToast("⚡ Включен режим 60 FPS (с эффектами)");
-            } else {
-                html.setAttribute('data-fps', '120');
-                fpsBtn.textContent = '⚡ Турбо: 120 FPS';
-                showToast("🚀 Включен Турбо 120 FPS (сайт летает за тобой!)");
             }
         }
     </script>
