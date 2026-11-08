@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeVPN — FPS Switcher Edition</title>
+    <title>CodeVPN — Ultimate Gist & Notifications Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <!-- QR Code Generator -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -174,7 +174,6 @@
             --grid-color: rgba(99, 102, 241, 0.05);
         }
 
-        /* Если включен режим 120 FPS (Турбо), убираем тяжёлые тени и анимации для мгновенного отклика */
         :root[data-fps="120"] * {
             backdrop-filter: none !important;
             -webkit-backdrop-filter: none !important;
@@ -950,21 +949,21 @@
     <div id="toast">🔑 Успешно скопировано в буфер!</div>
 
     <div class="container">
-        <!-- Верхняя панель с переключателем FPS (120 / 60) -->
+        <!-- Верхняя панель управления -->
         <div class="top-bar">
             <div class="top-switcher-bar">
                 <button class="switch-btn" id="themeToggleBtn" onclick="toggleTheme()">🌈 Радужный неон</button>
                 <button class="switch-btn" id="lightModeBtn" onclick="toggleLightMode()">☀️ Белый</button>
                 <button class="switch-btn" id="fpsToggleBtn" onclick="toggleFpsMode()">⚡ Турбо: 120 FPS</button>
             </div>
-            <div class="theme-tip">(P.S. Можно переключать режимы 120 / 60 FPS для экономии ресурсов)</div>
+            <div class="theme-tip">(P.S. Переключай режимы 120 / 60 FPS под свои задачи!)</div>
         </div>
 
         <!-- Статус-бар -->
         <div class="network-status-bar">
             <div class="status-indicator">
                 <div class="status-dot"></div>
-                <span>Статус системы: RGB Gaming Neon & Gist Gateway 🚀</span>
+                <span>Статус системы: RGB Gaming Neon & Push Gateway 🚀</span>
             </div>
             <span style="font-size: 0.72rem; color: var(--text-muted);">Live</span>
         </div>
@@ -987,7 +986,7 @@
                 <div class="steps-list">
                     <li><strong>Выбери софт:</strong> Скачай проверенный клиент во вкладке «Софт».</li>
                     <li><strong>Забери ключи:</strong> Во вкладке «Серверы» пройди загадку и скопируй подписку.</li>
-                    <li><strong>Шлюз Gist:</strong> Забери временный пробный микс подписок в новом разделе! 🚀</li>
+                    <li><strong>Шлюз Gist:</strong> Забери временный пробный микс подписок с минутным таймером! 🚀</li>
                 </div>
             </div>
 
@@ -1027,8 +1026,8 @@
                 <p style="color: var(--text-muted); margin-bottom: 20px;">Здесь публикуются все важные новости проекта и апдейты конфигураций.</p>
                 
                 <div class="update-banner">
-                    <h3>⚡ Апдейт: Переключатель 120 / 60 FPS</h3>
-                    <p>Возвращена кнопка управления частотой кадров. Теперь можно легко переключаться между Турбо 120 FPS и стандартными 60 FPS прямо в шапке сайта! 🚀</p>
+                    <h3>🔔 Апдейт: Push-уведомления и Минутный Таймер</h3>
+                    <p>Сайт теперь умеет отправлять уведомления о новых шлюзах и свежих апдейтах, а шлюз GitHub Gist обзавелся точным минутным таймером обратного отсчета! 🚀</p>
                 </div>
             </div>
         </div>
@@ -1220,7 +1219,9 @@
                         <input type="text" id="gistLinkInput" class="dev-input" readonly value="https://gist.githubusercontent.com/danlil230/YOUR_GIST_ID/raw/gate-sub.yaml">
                         <button class="dev-btn" onclick="copyGistLink()">📋 Копировать</button>
                     </div>
-                    <p style="font-size: 0.78rem; color: #ffcc00; margin-top: 12px;">⏳ Статус: Активен в течение 24 часов.</p>
+                    <p id="gatewayTimer" style="font-size: 0.9rem; font-family: 'Fira Code', monospace; color: #ffcc00; margin-top: 15px; font-weight: 700;">
+                        ⏳ До обновления шлюза: 24:00:00
+                    </p>
                 </div>
             </div>
         </div>
@@ -1264,7 +1265,7 @@
 
         <!-- ФУТЕР ДЛЯ РЕЖИМА РАЗРАБОТЧИКА (7 КЛИКОВ) -->
         <footer onclick="handleDevClick()">
-            &copy; 2026 <span>CodeVPN Project</span>. FPS Switcher & Dev Mode 🐾
+            &copy; 2026 <span>CodeVPN Project</span>. Push Gateway & Dev Mode 🐾
         </footer>
     </div>
 
@@ -1283,6 +1284,7 @@
         const yamlUrl = "https://pozor.bond/sub/ryz156w0996b";
         const secretDevPass = "9142"; // Динамический пароль разработчика
         let devClickCount = 0;
+        let countdownInterval = null;
 
         const catQuotes = [
             "🐾 «Радужный неон переливается всеми цветами киберпанка!»",
@@ -1292,8 +1294,9 @@
             "🚀 «CodeVPN: полный контроль над системой!»"
         ];
 
-        /* Автоматическое скрытие киберпанк-экрана загрузки */
+        /* Инициализация при загрузке страницы */
         window.addEventListener('DOMContentLoaded', () => {
+            // Плавное скрытие экрана загрузки
             setTimeout(() => {
                 const bootScreen = document.getElementById('cyberBootScreen');
                 if (bootScreen) {
@@ -1303,6 +1306,20 @@
                     }, 600);
                 }
             }, 1800);
+
+            // Запрос разрешений на Push-уведомления через 3 секунды после входа
+            if ("Notification" in window && Notification.permission === "default") {
+                setTimeout(() => {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === "granted") {
+                            showToast("🔔 Уведомления успешно включены!");
+                            new Notification("CodeVPN Project 🚀", {
+                                body: "Опа, привет! Уведомления активированы. Мы будем присылать весточки о шлюзах и апдейтах."
+                            });
+                        }
+                    });
+                }, 3000);
+            }
 
             const activePill = document.querySelector('.dock-pill.active');
             if (activePill) {
@@ -1343,7 +1360,7 @@
             }
         }
 
-        /* Логика шлюза GitHub Gist с таймером на 24 часа */
+        /* Логика шлюза GitHub Gist с минутным таймером на 24 часа */
         function openGistGateway() {
             const actionBox = document.getElementById('gatewayActionBox');
             const loadingBox = document.getElementById('gatewayLoading');
@@ -1356,11 +1373,45 @@
                 loadingBox.style.display = 'none';
                 resultBox.style.display = 'block';
                 
-                const expireTime = new Date().getTime() + (24 * 60 * 60 * 1000);
+                const duration = 24 * 60 * 60 * 1000;
+                const expireTime = new Date().getTime() + duration;
                 localStorage.setItem('codevpn_gist_expire', expireTime);
                 
+                startGatewayTimer(expireTime);
                 showToast("🔓 Шлюз GitHub Gist успешно открыт!");
             }, 2000);
+        }
+
+        function startGatewayTimer(expireTime) {
+            const timerDisplay = document.getElementById('gatewayTimer');
+            if (!timerDisplay) return;
+
+            if (countdownInterval) clearInterval(countdownInterval);
+
+            countdownInterval = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = expireTime - now;
+
+                if (distance < 0) {
+                    clearInterval(countdownInterval);
+                    localStorage.removeItem('codevpn_gist_expire');
+                    document.getElementById('gatewayActionBox').style.display = 'block';
+                    document.getElementById('gatewayResult').style.display = 'none';
+                    
+                    if ("Notification" in window && Notification.permission === "granted") {
+                        new Notification("⏳ Шлюз истёк!", {
+                            body: "Твой шлюз обновился. Скорее заходи на сайт за новым миксом ключей!",
+                        });
+                    }
+                    return;
+                }
+
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                timerDisplay.textContent = `⏳ До обновления шлюза: ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }, 1000);
         }
 
         function checkGistGatewayTimer() {
@@ -1370,6 +1421,7 @@
                 if (now < expireTime) {
                     document.getElementById('gatewayActionBox').style.display = 'none';
                     document.getElementById('gatewayResult').style.display = 'block';
+                    startGatewayTimer(parseInt(expireTime));
                 } else {
                     localStorage.removeItem('codevpn_gist_expire');
                 }
@@ -1559,4 +1611,4 @@
         }
     </script>
 </body>
-    </html>
+                    </html>
