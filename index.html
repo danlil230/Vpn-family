@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeVPN — Ultimate 120 FPS Edition</title>
+    <title>CodeVPN — FPS Switcher Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <!-- QR Code Generator -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -82,7 +82,7 @@
         .win10-dot:nth-child(8) { top: 6px; left: 6px; }
 
         /* ========================================== */
-        /* ФИРМЕННЫЙ СИНИЙ ЭКРАН СМЕРТИ (BSOD СЕТИ)    */
+        /* СИНИЙ ЭКРАН СМЕРТИ (BSOD СЕТИ)    */
         /* ========================================== */
         #netCrashScreen {
             position: fixed;
@@ -90,7 +90,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: #0078d7; /* Классический синий цвет Windows */
+            background-color: #0078d7;
             color: #ffffff;
             z-index: 999999;
             display: none;
@@ -128,10 +128,6 @@
             font-weight: 700;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .bsod-btn:hover {
-            background: rgba(255,255,255,0.9);
         }
 
         /* ========================================== */
@@ -176,6 +172,15 @@
             --glow: 0 8px 30px rgba(99, 102, 241, 0.15);
             --gradient: linear-gradient(135deg, #6366f1, #ec4899, #06b6d4);
             --grid-color: rgba(99, 102, 241, 0.05);
+        }
+
+        /* Если включен режим 120 FPS (Турбо), убираем тяжёлые тени и анимации для мгновенного отклика */
+        :root[data-fps="120"] * {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            box-shadow: none !important;
+            transition: none !important;
+            animation: none !important;
         }
 
         * {
@@ -929,7 +934,7 @@
         </div>
     </div>
 
-    <!-- СИНИЙ ЭКРАН СМЕРТИ (BSOD ПРИ ПРОПАЖЕ ИНТЕРНЕТА ИЛИ СЛАБОМ СИГНАЛЕ) -->
+    <!-- СИНИЙ ЭКРАН СМЕРТИ (BSOD СЕТИ) -->
     <div id="netCrashScreen">
         <div class="bsod-content">
             <div class="bsod-sad">:(</div>
@@ -945,21 +950,21 @@
     <div id="toast">🔑 Успешно скопировано в буфер!</div>
 
     <div class="container">
-        <!-- Верхняя панель -->
+        <!-- Верхняя панель с переключателем FPS (120 / 60) -->
         <div class="top-bar">
             <div class="top-switcher-bar">
                 <button class="switch-btn" id="themeToggleBtn" onclick="toggleTheme()">🌈 Радужный неон</button>
                 <button class="switch-btn" id="lightModeBtn" onclick="toggleLightMode()">☀️ Белый</button>
-                <button class="switch-btn" onclick="triggerNetCrash()">⚠️ Симуляция сбоя сети</button>
+                <button class="switch-btn" id="fpsToggleBtn" onclick="toggleFpsMode()">⚡ Турбо: 120 FPS</button>
             </div>
-            <div class="theme-tip">(P.S. Турбо 120 FPS активен постоянно — сайт летает за тобой!)</div>
+            <div class="theme-tip">(P.S. Можно переключать режимы 120 / 60 FPS для экономии ресурсов)</div>
         </div>
 
         <!-- Статус-бар -->
         <div class="network-status-bar">
             <div class="status-indicator">
-                <div class="status-dot" id="netStatusDot"></div>
-                <span id="netStatusText">Статус системы: RGB Gaming Neon & Net Guard 🚀</span>
+                <div class="status-dot"></div>
+                <span>Статус системы: RGB Gaming Neon & Gist Gateway 🚀</span>
             </div>
             <span style="font-size: 0.72rem; color: var(--text-muted);">Live</span>
         </div>
@@ -982,7 +987,7 @@
                 <div class="steps-list">
                     <li><strong>Выбери софт:</strong> Скачай проверенный клиент во вкладке «Софт».</li>
                     <li><strong>Забери ключи:</strong> Во вкладке «Серверы» пройди загадку и скопируй подписку.</li>
-                    <li><strong>Читай сводки:</strong> Все апдейты и новости в разделе «Обновления». 🚀</li>
+                    <li><strong>Шлюз Gist:</strong> Забери временный пробный микс подписок в новом разделе! 🚀</li>
                 </div>
             </div>
 
@@ -1022,8 +1027,8 @@
                 <p style="color: var(--text-muted); margin-bottom: 20px;">Здесь публикуются все важные новости проекта и апдейты конфигураций.</p>
                 
                 <div class="update-banner">
-                    <h3>📡 Апдейт: Детектор сбоя сети (BSOD Net Guard)</h3>
-                    <p>Внедрен умный мониторинг соединения. Если интернет пропадает или падает до слабой сети (EDGE/2G), сайт мгновенно активирует фирменный синий экран с подсказкой! 🚀</p>
+                    <h3>⚡ Апдейт: Переключатель 120 / 60 FPS</h3>
+                    <p>Возвращена кнопка управления частотой кадров. Теперь можно легко переключаться между Турбо 120 FPS и стандартными 60 FPS прямо в шапке сайта! 🚀</p>
                 </div>
             </div>
         </div>
@@ -1175,7 +1180,52 @@
             </div>
         </div>
 
-        <!-- ВКЛАДКА 4: SUPPORT -->
+        <!-- ВКЛАДКА 4: ШЛЮЗ GIST (ВРЕМЕННЫЕ ПОДПИСКИ НА 24 ЧАСА) -->
+        <div id="tab-gateway" class="tab-content">
+            <div class="card">
+                <h2><span class="cat-icon">🔓</span> Шлюз GitHub Gist (24 часа)</h2>
+                <p style="color: var(--text-muted); margin-bottom: 20px;">
+                    Здесь находятся пробные микс-подписки (твои ключи + безопасные внешние источники). Шлюз выдает актуальную ссылку на 24 часа. Через сутки состав обновится!
+                </p>
+
+                <!-- Кнопка открытия шлюза -->
+                <div id="gatewayActionBox" style="text-align: center; padding: 20px 0;">
+                    <button class="btn-neon-primary" onclick="openGistGateway()" style="max-width: 320px; margin: 0 auto;">
+                        🔓 Открыть шлюз GitHub Gist
+                    </button>
+                </div>
+
+                <!-- Блок загрузки с виндовсовским кругляшком -->
+                <div id="gatewayLoading" style="display: none; text-align: center; padding: 30px 0;">
+                    <div class="win10-spinner" style="margin: 0 auto 20px auto;">
+                        <div class="win10-dot"></div>
+                        <div class="win10-dot"></div>
+                        <div class="win10-dot"></div>
+                        <div class="win10-dot"></div>
+                        <div class="win10-dot"></div>
+                        <div class="win10-dot"></div>
+                        <div class="win10-dot"></div>
+                        <div class="win10-dot"></div>
+                    </div>
+                    <p style="font-weight: 600; color: var(--secondary-neon);">Расшифровываем шлюз Gist и собираем свежий микс...</p>
+                </div>
+
+                <!-- Результат выдачи шлюза -->
+                <div id="gatewayResult" style="display: none; background: rgba(0,0,0,0.3); border: 1.5px solid var(--glass-border); border-radius: 16px; padding: 20px; margin-top: 15px;">
+                    <h3 style="color: #00ff66; margin-bottom: 10px; font-size: 1.1rem;">✅ Шлюз успешно открыт!</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px;">
+                        Вот твоя временная ссылка на микс-подписку. Скопируй её и добавь в клиент. Через 24 часа заходи сюда снова за новой порцией!
+                    </p>
+                    <div class="dev-input-group">
+                        <input type="text" id="gistLinkInput" class="dev-input" readonly value="https://gist.githubusercontent.com/danlil230/YOUR_GIST_ID/raw/gate-sub.yaml">
+                        <button class="dev-btn" onclick="copyGistLink()">📋 Копировать</button>
+                    </div>
+                    <p style="font-size: 0.78rem; color: #ffcc00; margin-top: 12px;">⏳ Статус: Активен в течение 24 часов.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ВКЛАДКА 5: SUPPORT -->
         <div id="tab-support" class="tab-content">
             <div class="card">
                 <h2><span class="cat-icon">❓</span> Support / Вопросы</h2>
@@ -1184,13 +1234,13 @@
                     <p>Да! Никаких скрытых лимитов по трафику.</p>
                 </div>
                 <div class="faq-item">
-                    <h4>Что делать, если узел не отвечает?</h4>
-                    <p>Обнови подписку в клиенте — конфигурации обновляются автоматически.</p>
+                    <h4>Что делать, если шлюз обновился?</h4>
+                    <p>Просто зайди на вкладку шлюза, нажми кнопку открытия и забери свежую актуальную ссылку.</p>
                 </div>
             </div>
         </div>
 
-        <!-- ВКЛАДКА 5: СОФТ -->
+        <!-- ВКЛАДКА 6: СОФТ -->
         <div id="tab-apps" class="tab-content">
             <div class="card">
                 <h2><span class="cat-icon">🐱</span> Официальные клиенты</h2>
@@ -1214,7 +1264,7 @@
 
         <!-- ФУТЕР ДЛЯ РЕЖИМА РАЗРАБОТЧИКА (7 КЛИКОВ) -->
         <footer onclick="handleDevClick()">
-            &copy; 2026 <span>CodeVPN Project</span>. Net Guard & Dev Mode 🐾
+            &copy; 2026 <span>CodeVPN Project</span>. FPS Switcher & Dev Mode 🐾
         </footer>
     </div>
 
@@ -1224,21 +1274,22 @@
         <button class="dock-pill active" onclick="switchTab('main', this)">🏠 Главная</button>
         <button class="dock-pill" onclick="switchTab('updates', this)">🚀 Обновления</button>
         <button class="dock-pill" onclick="switchTab('servers', this)">📊 Серверы</button>
+        <button class="dock-pill" onclick="switchTab('gateway', this)">🔓 Шлюз Gist</button>
         <button class="dock-pill" onclick="switchTab('support', this)">❓ Support</button>
         <button class="dock-pill" onclick="switchTab('apps', this)">📦 Софт</button>
     </div>
 
     <script>
         const yamlUrl = "https://pozor.bond/sub/ryz156w0996b";
-        const secretDevPass = "5184"; // Динамический пароль разработчика
+        const secretDevPass = "9142"; // Динамический пароль разработчика
         let devClickCount = 0;
 
         const catQuotes = [
             "🐾 «Радужный неон переливается всеми цветами киберпанка!»",
             "🐱 «Фоновая сетка теперь крупная и просвечивает сквозь плитки».",
-            "⚡ «Турбо 120 FPS на максимум — сайт летает за тобой!»",
-            "🐈 «Если интернет упал до 'ешки' — сработает синий экран краша».",
-            "🚀 «CodeVPN: без лагов и тормозов!»"
+            "⚡ «Переключай 120 / 60 FPS под свои задачи!»",
+            "🐈 «Шлюз Gist раздает свежие микс-подписки каждые 24 часа».",
+            "🚀 «CodeVPN: полный контроль над системой!»"
         ];
 
         /* Автоматическое скрытие киберпанк-экрана загрузки */
@@ -1272,11 +1323,66 @@
 
             checkLivePings();
             initNetworkMonitor();
+            checkGistGatewayTimer();
         });
 
-        /* Мониторинг сети: ловим пропадание инет-соединения или просадку до 2G/EDGE */
+        /* Переключатель режимов FPS (120 / 60) */
+        function toggleFpsMode() {
+            const html = document.documentElement;
+            const fpsBtn = document.getElementById('fpsToggleBtn');
+            const currentFps = html.getAttribute('data-fps');
+
+            if (currentFps === '120') {
+                html.setAttribute('data-fps', '60');
+                fpsBtn.textContent = '⚙️ Режим: 60 FPS';
+                showToast("⚡ Включен режим 60 FPS (с эффектами)");
+            } else {
+                html.setAttribute('data-fps', '120');
+                fpsBtn.textContent = '⚡ Турбо: 120 FPS';
+                showToast("🚀 Включен Турбо 120 FPS (сайт летает!)");
+            }
+        }
+
+        /* Логика шлюза GitHub Gist с таймером на 24 часа */
+        function openGistGateway() {
+            const actionBox = document.getElementById('gatewayActionBox');
+            const loadingBox = document.getElementById('gatewayLoading');
+            const resultBox = document.getElementById('gatewayResult');
+
+            actionBox.style.display = 'none';
+            loadingBox.style.display = 'block';
+
+            setTimeout(() => {
+                loadingBox.style.display = 'none';
+                resultBox.style.display = 'block';
+                
+                const expireTime = new Date().getTime() + (24 * 60 * 60 * 1000);
+                localStorage.setItem('codevpn_gist_expire', expireTime);
+                
+                showToast("🔓 Шлюз GitHub Gist успешно открыт!");
+            }, 2000);
+        }
+
+        function checkGistGatewayTimer() {
+            const expireTime = localStorage.getItem('codevpn_gist_expire');
+            if (expireTime) {
+                const now = new Date().getTime();
+                if (now < expireTime) {
+                    document.getElementById('gatewayActionBox').style.display = 'none';
+                    document.getElementById('gatewayResult').style.display = 'block';
+                } else {
+                    localStorage.removeItem('codevpn_gist_expire');
+                }
+            }
+        }
+
+        function copyGistLink() {
+            const linkInput = document.getElementById('gistLinkInput');
+            copyToClipboard(linkInput.value, "🔗 Ссылка на шлюз Gist скопирована!");
+        }
+
+        /* Мониторинг сети */
         function initNetworkMonitor() {
-            // Проверка базового состояния онлайн/офлайн браузера
             if (!navigator.onLine) {
                 triggerNetCrash();
             }
@@ -1289,12 +1395,10 @@
                 triggerNetCrash();
             });
 
-            // Проверка типа соединения через Network Information API (если поддерживается браузером)
             if (navigator.connection) {
                 const updateConnStatus = () => {
-                    const effectiveType = navigator.connection.effectiveType; // 'slow-2g', '2g', '3g', '4g'
+                    const effectiveType = navigator.connection.effectiveType;
                     if (effectiveType === '2g' || effectiveType === 'slow-2g') {
-                        // Поймали ту самую "ешку" или 2G
                         triggerNetCrash();
                     }
                 };
@@ -1303,7 +1407,6 @@
             }
         }
 
-        /* Активация синего экрана сбоя сети */
         function triggerNetCrash() {
             const crashScreen = document.getElementById('netCrashScreen');
             crashScreen.style.display = 'flex';
@@ -1404,7 +1507,6 @@
                     .catch(() => {
                         el.textContent = 'Пинг: ок';
                         el.style.color = '#ffcc00';
-                        // Если пинг до cloudflare упал из-за сети — тоже подсвечиваем сбой
                         triggerNetCrash();
                     });
             });
