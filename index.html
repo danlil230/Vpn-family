@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeVPN — Chrome & Notifications Edition</title>
+    <title>CodeVPN — Ultimate Gist Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <!-- QR Code Generator -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -1265,14 +1265,14 @@
                     <p style="font-weight: 600; color: var(--secondary-neon);">Расшифровываем шлюз Gist и собираем свежий микс...</p>
                 </div>
 
-                <!-- Результат выдачи шлюза -->
+                <!-- Результат выдачи шлюза (ВЕЧНАЯ ССЫЛКА БЕЗ КОММИТОВ) -->
                 <div id="gatewayResult" style="display: none; background: rgba(0,0,0,0.3); border: 1.5px solid var(--glass-border); border-radius: 16px; padding: 20px; margin-top: 15px;">
                     <h3 style="color: #00ff66; margin-bottom: 10px; font-size: 1.1rem;">✅ Шлюз успешно открыт!</h3>
                     <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px;">
-                        Вот твоя временная ссылка на микс-подписку. Скопируй её и добавь в клиент. Через 24 часа заходи сюда снова за новой порцией!
+                        Вот твоя вечная ссылка на микс-подписку. Скопируй её и добавь в клиент. Она никогда не устареет!
                     </p>
                     <div class="dev-input-group">
-                        <input type="text" id="gistLinkInput" class="dev-input" readonly value="https://gist.githubusercontent.com/danlil230/2360b6ae91cc2f46cfebf97c48f2191b/raw/gate-sub.yaml">
+                        <input type="text" id="gistLinkInput" class="dev-input" readonly value="https://gist.githubusercontent.com/danlil230/e773a82bc5921475de4f939a06d67b65/raw/Full.txt">
                         <button class="dev-btn" onclick="copyGistLink()">📋 Копировать</button>
                     </div>
                     <p id="gatewayTimer" style="font-size: 0.9rem; font-family: 'Fira Code', monospace; color: #ffcc00; margin-top: 15px; font-weight: 700;">
@@ -1308,7 +1308,7 @@
                         <span class="btn-desc">Классический мощный комбайн</span>
                     </a>
                     <a href="https://github.com/happ-proxy/happ-android/releases" class="btn-secondary" target="_blank">
-                        📱 Happ (iOS / Android)
+                        📱 iOS / Android (Happ)
                         <span class="btn-desc">Удобное приложение под подписки</span>
                     </a>
                     <a href="https://github.com/INCY-DEV/incy-platforms" class="btn-secondary" target="_blank">
@@ -1321,7 +1321,7 @@
 
         <!-- ФУТЕР ДЛЯ РЕЖИМА РАЗРАБОТЧИКА (7 КЛИКОВ) -->
         <footer onclick="handleDevClick()">
-            &copy; 2026 <span>CodeVPN Project</span>. Chrome & Dev Mode 🐾
+            &copy; 2026 <span>CodeVPN Project</span>. Permanent Raw Gist Edition 🐾
         </footer>
     </div>
 
@@ -1349,7 +1349,7 @@
             "🐱 «Фоновая сетка теперь крупная и просвечивает сквозь плитки».",
             "⚡ «Переключай 120 / 60 FPS под свои задачи!»",
             "🐈 «Шлюз Gist раздает свежие микс-подписки каждые 24 часа».",
-            "🚀 «CodeVPN: Chrome зафиксирован, работаем!»"
+            "🚀 «CodeVPN: Вечный raw-шлюз подключен!»"
         ];
 
         /* Определение браузера при загрузке */
@@ -1367,7 +1367,6 @@
                 }
             }, 1800);
 
-            // Если открыто в Яндексе или Chrome, настраиваем модалку уведомлений
             if ("Notification" in window && Notification.permission === "default") {
                 setTimeout(() => {
                     const modal = document.getElementById('customNotifModal');
@@ -1384,7 +1383,6 @@
                             <button class="riddle-btn" onclick="closeCustomModal()" style="background: var(--primary-neon); color: #fff; width: 100%;">Понятно, ок 👍</button>
                         `;
                     } else {
-                        // Для Chrome показываем штатный призыв к плашке
                         emojiEl.textContent = "👋";
                         titleEl.textContent = "Привет!";
                         textEl.innerHTML = "Сейчас сверху появится плашка <strong>«Разрешить уведомления»</strong>. Активируй её и подтверди действие, тогда эта плашка уберётся.";
@@ -1425,7 +1423,6 @@
             document.getElementById('customNotifModal').style.display = 'none';
         }
 
-        /* Запрос уведомлений для Chrome */
         function openCustomNotifModal() {
             if (isYandexBrowser) {
                 alert("⚠️ Упс! Зайди через Google Chrome, иначе уведомления не включить. Трудимся и скоро будем пропускать и Яндекс!");
@@ -1454,7 +1451,7 @@
         }
 
         function showHelpModal() {
-            alert("💡 Инструкция для Google Chrome:\n\nЕсли браузер заблокировал плашка или она не появилась:\n1. Нажми на иконку «замочка» 🔒 слева от адреса сайта вверху.\n2. Перейди в «Разрешения сайта» или «Уведомления».\n3. Смени статус с «Блокировать» на «Разрешить».\n4. Перезагрузи страницу!");
+            alert("💡 Инструкция для Google Chrome:\n\nЕсли браузер заблокировал плашку или она не появилась:\n1. Нажми на иконку «замочка» 🔒 слева от адреса сайта вверху.\n2. Перейди в «Разрешения сайта» или «Уведомления».\n3. Смени статус с «Блокировать» на «Разрешить».\n4. Перезагрузи страницу!");
         }
 
         function updateNotifStatusText() {
@@ -1478,7 +1475,6 @@
             }
         }
 
-        /* Переключатель режимов FPS (120 / 60) */
         function toggleFpsMode() {
             const html = document.documentElement;
             const fpsBtn = document.getElementById('fpsToggleBtn');
@@ -1495,7 +1491,6 @@
             }
         }
 
-        /* Логика шлюза GitHub Gist с минутным таймером и фоновым напоминанием за 10 минут */
         function openGistGateway() {
             const actionBox = document.getElementById('gatewayActionBox');
             const loadingBox = document.getElementById('gatewayLoading');
@@ -1575,10 +1570,9 @@
 
         function copyGistLink() {
             const linkInput = document.getElementById('gistLinkInput');
-            copyToClipboard(linkInput.value, "🔗 Ссылка на шлюз Gist скопирована!");
+            copyToClipboard(linkInput.value, "🔗 Вечная ссылка на шлюз Gist скопирована!");
         }
 
-        /* Мониторинг сети */
         function initNetworkMonitor() {
             if (!navigator.onLine) {
                 triggerNetCrash();
@@ -1609,7 +1603,6 @@
             crashScreen.style.display = 'flex';
         }
 
-        /* Обработка кликов по копирайту в футере для вызова Режима разработчика (7 кликов) */
         function handleDevClick() {
             devClickCount++;
             if (devClickCount < 7) {
