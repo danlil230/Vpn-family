@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeVPN — Ultimate Gist & Notifications Edition</title>
+    <title>CodeVPN — Notification Center Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <!-- QR Code Generator -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -82,7 +82,38 @@
         .win10-dot:nth-child(8) { top: 6px; left: 6px; }
 
         /* ========================================== */
-        /* СИНИЙ ЭКРАН СМЕРТИ (BSOD СЕТИ)    */
+        /* КАСТОМНОЕ ПРОЗРАЧНОЕ ОКНО УВЕДОМЛЕНИЙ       */
+        /* ========================================== */
+        #customNotifModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(1, 2, 4, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 999999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .notif-modal-card {
+            background: rgba(8, 11, 22, 0.7);
+            border: 1.5px solid;
+            animation: rgbBorderGlow 6s infinite;
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+
+        /* ========================================== */
+        /* СИНИЙ ЭКРАН СМЕРТИ (BSOD СЕТИ)            */
         /* ========================================== */
         #netCrashScreen {
             position: fixed;
@@ -933,6 +964,21 @@
         </div>
     </div>
 
+    <!-- КАСТОМНОЕ ПРОЗРАЧНОЕ ОКНО ЦЕНТРА УВЕДОМЛЕНИЙ -->
+    <div id="customNotifModal">
+        <div class="notif-modal-card">
+            <div style="font-size: 2.5rem; margin-bottom: 12px;">🔔</div>
+            <h3 style="color: #fff; margin-bottom: 10px; font-size: 1.2rem;">Центр уведомлений CodeVPN</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
+                Разреши сайту присылать пуш-весточки, чтобы вовремя узнавать об истечении шлюзов и свежих апдейтах!
+            </p>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button class="riddle-btn" onclick="requestCustomNotification(true)" style="background: var(--primary-neon); color: #fff;">✅ Включить</button>
+                <button class="riddle-btn" onclick="requestCustomNotification(false)">❌ Позже</button>
+            </div>
+        </div>
+    </div>
+
     <!-- СИНИЙ ЭКРАН СМЕРТИ (BSOD СЕТИ) -->
     <div id="netCrashScreen">
         <div class="bsod-content">
@@ -963,7 +1009,7 @@
         <div class="network-status-bar">
             <div class="status-indicator">
                 <div class="status-dot"></div>
-                <span>Статус системы: RGB Gaming Neon & Push Gateway 🚀</span>
+                <span>Статус системы: Custom Notification Center 🚀</span>
             </div>
             <span style="font-size: 0.72rem; color: var(--text-muted);">Live</span>
         </div>
@@ -986,7 +1032,7 @@
                 <div class="steps-list">
                     <li><strong>Выбери софт:</strong> Скачай проверенный клиент во вкладке «Софт».</li>
                     <li><strong>Забери ключи:</strong> Во вкладке «Серверы» пройди загадку и скопируй подписку.</li>
-                    <li><strong>Шлюз Gist:</strong> Забери временный пробный микс подписок с минутным таймером! 🚀</li>
+                    <li><strong>Центр уведомлений:</strong> Настрой кастомные пуши в новом разделе! 🚀</li>
                 </div>
             </div>
 
@@ -1022,12 +1068,13 @@
         <!-- ВКЛАДКА 2: ОБНОВЛЕНИЯ -->
         <div id="tab-updates" class="tab-content">
             <div class="card">
-                <h2><span class="cat-icon">🚀</span> Обновления и сводки</h2>
-                <p style="color: var(--text-muted); margin-bottom: 20px;">Здесь публикуются все важные новости проекта и апдейты конфигураций.</p>
+                <h2><span class="cat-icon">🚀</span> Центр уведомлений и сводки</h2>
+                <p style="color: var(--text-muted); margin-bottom: 20px;">Управляй оповещениями и следи за свежими апдейтами системы.</p>
                 
-                <div class="update-banner">
-                    <h3>🔔 Апдейт: Push-уведомления и Минутный Таймер</h3>
-                    <p>Сайт теперь умеет отправлять уведомления о новых шлюзах и свежих апдейтах, а шлюз GitHub Gist обзавелся точным минутным таймером обратного отсчета! 🚀</p>
+                <div class="update-banner" style="margin-bottom: 20px;">
+                    <h3>🔔 Статус оповещений</h3>
+                    <p id="notifStatusText" style="margin-bottom: 15px;">Проверяем статус разрешений...</p>
+                    <button class="switch-btn" onclick="openCustomNotifModal()">⚙️ Открыть Центр уведомлений</button>
                 </div>
             </div>
         </div>
@@ -1265,7 +1312,7 @@
 
         <!-- ФУТЕР ДЛЯ РЕЖИМА РАЗРАБОТЧИКА (7 КЛИКОВ) -->
         <footer onclick="handleDevClick()">
-            &copy; 2026 <span>CodeVPN Project</span>. Push Gateway & Dev Mode 🐾
+            &copy; 2026 <span>CodeVPN Project</span>. Notification Center & Dev Mode 🐾
         </footer>
     </div>
 
@@ -1291,12 +1338,11 @@
             "🐱 «Фоновая сетка теперь крупная и просвечивает сквозь плитки».",
             "⚡ «Переключай 120 / 60 FPS под свои задачи!»",
             "🐈 «Шлюз Gist раздает свежие микс-подписки каждые 24 часа».",
-            "🚀 «CodeVPN: полный контроль над системой!»"
+            "🚀 «CodeVPN: Центр уведомлений активен!»"
         ];
 
         /* Инициализация при загрузке страницы */
         window.addEventListener('DOMContentLoaded', () => {
-            // Плавное скрытие экрана загрузки
             setTimeout(() => {
                 const bootScreen = document.getElementById('cyberBootScreen');
                 if (bootScreen) {
@@ -1307,19 +1353,14 @@
                 }
             }, 1800);
 
-            // Запрос разрешений на Push-уведомления через 3 секунды после входа
+            // Показываем наше кастомное окно уведомлений через 3 секунды, если разрешение еще не выдано
             if ("Notification" in window && Notification.permission === "default") {
                 setTimeout(() => {
-                    Notification.requestPermission().then(permission => {
-                        if (permission === "granted") {
-                            showToast("🔔 Уведомления успешно включены!");
-                            new Notification("CodeVPN Project 🚀", {
-                                body: "Опа, привет! Уведомления активированы. Мы будем присылать весточки о шлюзах и апдейтах."
-                            });
-                        }
-                    });
+                    document.getElementById('customNotifModal').style.display = 'flex';
                 }, 3000);
             }
+
+            updateNotifStatusText();
 
             const activePill = document.querySelector('.dock-pill.active');
             if (activePill) {
@@ -1342,6 +1383,51 @@
             initNetworkMonitor();
             checkGistGatewayTimer();
         });
+
+        /* Логика кастомного центра уведомлений */
+        function openCustomNotifModal() {
+            document.getElementById('customNotifModal').style.display = 'flex';
+        }
+
+        function requestCustomNotification(allow) {
+            const modal = document.getElementById('customNotifModal');
+            modal.style.display = 'none';
+
+            if (allow && "Notification" in window) {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        showToast("🔔 Уведомления успешно включены!");
+                        new Notification("CodeVPN Project 🚀", {
+                            body: "Опа, привет! Центр уведомлений активирован. Мы держим шлюзы под контролем."
+                        });
+                    } else {
+                        showToast("❌ Разрешение на уведомления отклонено.");
+                    }
+                    updateNotifStatusText();
+                });
+            } else {
+                showToast("💤 Уведомления отложены.");
+                updateNotifStatusText();
+            }
+        }
+
+        function updateNotifStatusText() {
+            const statusEl = document.getElementById('notifStatusText');
+            if (!statusEl) return;
+            
+            if (!("Notification" in window)) {
+                statusEl.textContent = "⚠️ Браузер не поддерживает уведомления.";
+            } else if (Notification.permission === "granted") {
+                statusEl.textContent = "✅ Статус: Уведомления включены и активны!";
+                statusEl.style.color = "#00ff66";
+            } else if (Notification.permission === "denied") {
+                statusEl.textContent = "❌ Статус: Заблокированы в настройках браузера.";
+                statusEl.style.color = "#ff4d4d";
+            } else {
+                statusEl.textContent = "⏳ Статус: Еще не настроены. Нажми кнопку ниже!";
+                statusEl.style.color = "#ffcc00";
+            }
+        }
 
         /* Переключатель режимов FPS (120 / 60) */
         function toggleFpsMode() {
@@ -1611,4 +1697,4 @@
         }
     </script>
 </body>
-                    </html>
+</html>
