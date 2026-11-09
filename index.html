@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeVPN — Ultimate Gist Edition</title>
+    <title>CodeVPN — FPS Switcher Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <!-- QR Code Generator -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -82,47 +82,7 @@
         .win10-dot:nth-child(8) { top: 6px; left: 6px; }
 
         /* ========================================== */
-        /* КАСТОМНОЕ ПРОЗРАЧНОЕ ОКНО УВЕДОМЛЕНИЙ       */
-        /* ========================================== */
-        #customNotifModal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(1, 2, 4, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            z-index: 999999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .notif-modal-card {
-            background: rgba(8, 11, 22, 0.85);
-            border: 1.5px solid;
-            animation: rgbBorderGlow 6s infinite;
-            border-radius: 24px;
-            padding: 30px;
-            max-width: 420px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-        }
-
-        .notif-guide-link {
-            display: inline-block;
-            margin-top: 15px;
-            color: var(--secondary-neon);
-            font-size: 0.85rem;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
-        /* ========================================== */
-        /* СИНИЙ ЭКРАН СМЕРТИ (BSOD СЕТИ)            */
+        /* СИНИЙ ЭКРАН СМЕРТИ (BSOD СЕТИ)    */
         /* ========================================== */
         #netCrashScreen {
             position: fixed;
@@ -214,6 +174,7 @@
             --grid-color: rgba(99, 102, 241, 0.05);
         }
 
+        /* Если включен режим 120 FPS (Турбо), убираем тяжёлые тени и анимации для мгновенного отклика */
         :root[data-fps="120"] * {
             backdrop-filter: none !important;
             -webkit-backdrop-filter: none !important;
@@ -973,21 +934,6 @@
         </div>
     </div>
 
-    <!-- КАСТОМНОЕ ПРОЗРАЧНОЕ ОКНО ПРИВЕТСТВИЯ ДЛЯ УВЕДОМЛЕНИЙ -->
-    <div id="customNotifModal">
-        <div class="notif-modal-card">
-            <div style="font-size: 2.5rem; margin-bottom: 12px;" id="modalEmoji">👋</div>
-            <h3 style="color: #fff; margin-bottom: 10px; font-size: 1.2rem;" id="modalTitle">Привет!</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;" id="modalText">
-                Сейчас сверху появится плашка <strong>«Разрешить уведомления»</strong>. Активируй её и подтверди действие, тогда эта плашка уберётся.
-            </p>
-            <div style="display: flex; gap: 10px; justify-content: center; flex-direction: column;" id="modalButtons">
-                <button class="riddle-btn" onclick="requestCustomNotification()" style="background: var(--primary-neon); color: #fff; width: 100%;">🚀 Понятно, запросить плашку</button>
-                <a class="notif-guide-link" onclick="showHelpModal()">❓ Плашка не появилась? Кликни для инструкции</a>
-            </div>
-        </div>
-    </div>
-
     <!-- СИНИЙ ЭКРАН СМЕРТИ (BSOD СЕТИ) -->
     <div id="netCrashScreen">
         <div class="bsod-content">
@@ -1004,21 +950,21 @@
     <div id="toast">🔑 Успешно скопировано в буфер!</div>
 
     <div class="container">
-        <!-- Верхняя панель управления -->
+        <!-- Верхняя панель с переключателем FPS (120 / 60) -->
         <div class="top-bar">
             <div class="top-switcher-bar">
                 <button class="switch-btn" id="themeToggleBtn" onclick="toggleTheme()">🌈 Радужный неон</button>
                 <button class="switch-btn" id="lightModeBtn" onclick="toggleLightMode()">☀️ Белый</button>
                 <button class="switch-btn" id="fpsToggleBtn" onclick="toggleFpsMode()">⚡ Турбо: 120 FPS</button>
             </div>
-            <div class="theme-tip">(P.S. Переключай режимы 120 / 60 FPS под свои задачи!)</div>
+            <div class="theme-tip">(P.S. Можно переключать режимы 120 / 60 FPS для экономии ресурсов)</div>
         </div>
 
         <!-- Статус-бар -->
         <div class="network-status-bar">
             <div class="status-indicator">
                 <div class="status-dot"></div>
-                <span>Статус системы: Chrome & Notification Guard 🚀</span>
+                <span>Статус системы: RGB Gaming Neon & Gist Gateway 🚀</span>
             </div>
             <span style="font-size: 0.72rem; color: var(--text-muted);">Live</span>
         </div>
@@ -1041,7 +987,7 @@
                 <div class="steps-list">
                     <li><strong>Выбери софт:</strong> Скачай проверенный клиент во вкладке «Софт».</li>
                     <li><strong>Забери ключи:</strong> Во вкладке «Серверы» пройди загадку и скопируй подписку.</li>
-                    <li><strong>Шлюз Gist:</strong> Забери временный микс с минутным таймером и фоновым пушем! 🚀</li>
+                    <li><strong>Шлюз Gist:</strong> Забери временный пробный микс подписок в новом разделе! 🚀</li>
                 </div>
             </div>
 
@@ -1077,13 +1023,12 @@
         <!-- ВКЛАДКА 2: ОБНОВЛЕНИЯ -->
         <div id="tab-updates" class="tab-content">
             <div class="card">
-                <h2><span class="cat-icon">🚀</span> Центр уведомлений и сводки</h2>
-                <p style="color: var(--text-muted); margin-bottom: 20px;">Управляй оповещениями и следи за свежими апдейтами системы.</p>
+                <h2><span class="cat-icon">🚀</span> Обновления и сводки</h2>
+                <p style="color: var(--text-muted); margin-bottom: 20px;">Здесь публикуются все важные новости проекта и апдейты конфигураций.</p>
                 
-                <div class="update-banner" style="margin-bottom: 20px;">
-                    <h3>🔔 Статус оповещений в шторку</h3>
-                    <p id="notifStatusText" style="margin-bottom: 15px;">Проверяем статус разрешений...</p>
-                    <button class="switch-btn" onclick="openCustomNotifModal()">⚙️ Открыть Центр уведомлений</button>
+                <div class="update-banner">
+                    <h3>⚡ Апдейт: Переключатель 120 / 60 FPS</h3>
+                    <p>Возвращена кнопка управления частотой кадров. Теперь можно легко переключаться между Турбо 120 FPS и стандартными 60 FPS прямо в шапке сайта! 🚀</p>
                 </div>
             </div>
         </div>
@@ -1265,19 +1210,17 @@
                     <p style="font-weight: 600; color: var(--secondary-neon);">Расшифровываем шлюз Gist и собираем свежий микс...</p>
                 </div>
 
-                <!-- Результат выдачи шлюза (ВЕЧНАЯ ССЫЛКА БЕЗ КОММИТОВ) -->
+                <!-- Результат выдачи шлюза -->
                 <div id="gatewayResult" style="display: none; background: rgba(0,0,0,0.3); border: 1.5px solid var(--glass-border); border-radius: 16px; padding: 20px; margin-top: 15px;">
                     <h3 style="color: #00ff66; margin-bottom: 10px; font-size: 1.1rem;">✅ Шлюз успешно открыт!</h3>
                     <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px;">
-                        Вот твоя вечная ссылка на микс-подписку. Скопируй её и добавь в клиент. Она никогда не устареет!
+                        Вот твоя временная ссылка на микс-подписку. Скопируй её и добавь в клиент. Через 24 часа заходи сюда снова за новой порцией!
                     </p>
                     <div class="dev-input-group">
-                        <input type="text" id="gistLinkInput" class="dev-input" readonly value="https://gist.githubusercontent.com/danlil230/e773a82bc5921475de4f939a06d67b65/raw/Full.txt">
+                        <input type="text" id="gistLinkInput" class="dev-input" readonly value="https://gist.githubusercontent.com/danlil230/YOUR_GIST_ID/raw/gate-sub.yaml">
                         <button class="dev-btn" onclick="copyGistLink()">📋 Копировать</button>
                     </div>
-                    <p id="gatewayTimer" style="font-size: 0.9rem; font-family: 'Fira Code', monospace; color: #ffcc00; margin-top: 15px; font-weight: 700;">
-                        ⏳ До обновления шлюза: 24:00:00
-                    </p>
+                    <p style="font-size: 0.78rem; color: #ffcc00; margin-top: 12px;">⏳ Статус: Активен в течение 24 часов.</p>
                 </div>
             </div>
         </div>
@@ -1308,7 +1251,7 @@
                         <span class="btn-desc">Классический мощный комбайн</span>
                     </a>
                     <a href="https://github.com/happ-proxy/happ-android/releases" class="btn-secondary" target="_blank">
-                        📱 iOS / Android (Happ)
+                        📱 Happ (iOS / Android)
                         <span class="btn-desc">Удобное приложение под подписки</span>
                     </a>
                     <a href="https://github.com/INCY-DEV/incy-platforms" class="btn-secondary" target="_blank">
@@ -1321,7 +1264,7 @@
 
         <!-- ФУТЕР ДЛЯ РЕЖИМА РАЗРАБОТЧИКА (7 КЛИКОВ) -->
         <footer onclick="handleDevClick()">
-            &copy; 2026 <span>CodeVPN Project</span>. Permanent Raw Gist Edition 🐾
+            &copy; 2026 <span>CodeVPN Project</span>. FPS Switcher & Dev Mode 🐾
         </footer>
     </div>
 
@@ -1340,23 +1283,17 @@
         const yamlUrl = "https://pozor.bond/sub/ryz156w0996b";
         const secretDevPass = "9142"; // Динамический пароль разработчика
         let devClickCount = 0;
-        let countdownInterval = null;
-        let warned10Mins = false;
-        let isYandexBrowser = false;
 
         const catQuotes = [
             "🐾 «Радужный неон переливается всеми цветами киберпанка!»",
             "🐱 «Фоновая сетка теперь крупная и просвечивает сквозь плитки».",
             "⚡ «Переключай 120 / 60 FPS под свои задачи!»",
             "🐈 «Шлюз Gist раздает свежие микс-подписки каждые 24 часа».",
-            "🚀 «CodeVPN: Вечный raw-шлюз подключен!»"
+            "🚀 «CodeVPN: полный контроль над системой!»"
         ];
 
-        /* Определение браузера при загрузке */
+        /* Автоматическое скрытие киберпанк-экрана загрузки */
         window.addEventListener('DOMContentLoaded', () => {
-            const ua = navigator.userAgent.toLowerCase();
-            isYandexBrowser = ua.includes('yabrowser') || ua.includes('yandex');
-
             setTimeout(() => {
                 const bootScreen = document.getElementById('cyberBootScreen');
                 if (bootScreen) {
@@ -1366,36 +1303,6 @@
                     }, 600);
                 }
             }, 1800);
-
-            if ("Notification" in window && Notification.permission === "default") {
-                setTimeout(() => {
-                    const modal = document.getElementById('customNotifModal');
-                    const emojiEl = document.getElementById('modalEmoji');
-                    const titleEl = document.getElementById('modalTitle');
-                    const textEl = document.getElementById('modalText');
-                    const buttonsEl = document.getElementById('modalButtons');
-
-                    if (isYandexBrowser) {
-                        emojiEl.textContent = "🦊";
-                        titleEl.textContent = "Упс!";
-                        textEl.innerHTML = "Зайди через <strong>Google Chrome</strong>, иначе уведомления не включить. Трудимся и скоро будем пропускать и Яндекс!";
-                        buttonsEl.innerHTML = `
-                            <button class="riddle-btn" onclick="closeCustomModal()" style="background: var(--primary-neon); color: #fff; width: 100%;">Понятно, ок 👍</button>
-                        `;
-                    } else {
-                        emojiEl.textContent = "👋";
-                        titleEl.textContent = "Привет!";
-                        textEl.innerHTML = "Сейчас сверху появится плашка <strong>«Разрешить уведомления»</strong>. Активируй её и подтверди действие, тогда эта плашка уберётся.";
-                        buttonsEl.innerHTML = `
-                            <button class="riddle-btn" onclick="requestCustomNotification()" style="background: var(--primary-neon); color: #fff; width: 100%;">🚀 Понятно, запросить плашку</button>
-                            <a class="notif-guide-link" onclick="showHelpModal()">❓ Плашка не появилась? Кликни для инструкции</a>
-                        `;
-                    }
-                    modal.style.display = 'flex';
-                }, 2500);
-            }
-
-            updateNotifStatusText();
 
             const activePill = document.querySelector('.dock-pill.active');
             if (activePill) {
@@ -1419,62 +1326,7 @@
             checkGistGatewayTimer();
         });
 
-        function closeCustomModal() {
-            document.getElementById('customNotifModal').style.display = 'none';
-        }
-
-        function openCustomNotifModal() {
-            if (isYandexBrowser) {
-                alert("⚠️ Упс! Зайди через Google Chrome, иначе уведомления не включить. Трудимся и скоро будем пропускать и Яндекс!");
-                return;
-            }
-            document.getElementById('customNotifModal').style.display = 'flex';
-        }
-
-        function requestCustomNotification() {
-            const modal = document.getElementById('customNotifModal');
-            modal.style.display = 'none';
-
-            if ("Notification" in window) {
-                Notification.requestPermission().then(permission => {
-                    if (permission === "granted") {
-                        showToast("🔔 Уведомления успешно включены!");
-                        new Notification("CodeVPN Project 🚀", {
-                            body: "Опа, привет! Уведомления активированы. Мы предупредим тебя за 10 минут до истечения шлюза."
-                        });
-                    } else {
-                        showToast("❌ Разрешение отклонено в браузере.");
-                    }
-                    updateNotifStatusText();
-                });
-            }
-        }
-
-        function showHelpModal() {
-            alert("💡 Инструкция для Google Chrome:\n\nЕсли браузер заблокировал плашку или она не появилась:\n1. Нажми на иконку «замочка» 🔒 слева от адреса сайта вверху.\n2. Перейди в «Разрешения сайта» или «Уведомления».\n3. Смени статус с «Блокировать» на «Разрешить».\n4. Перезагрузи страницу!");
-        }
-
-        function updateNotifStatusText() {
-            const statusEl = document.getElementById('notifStatusText');
-            if (!statusEl) return;
-            
-            if (isYandexBrowser) {
-                statusEl.textContent = "🦊 Яндекс.Браузер: Уведомления недоступны. Зайди через Google Chrome!";
-                statusEl.style.color = "#ffcc00";
-            } else if (!("Notification" in window)) {
-                statusEl.textContent = "⚠️ Браузер не поддерживает уведомления.";
-            } else if (Notification.permission === "granted") {
-                statusEl.textContent = "✅ Статус: Уведомления активны (шлюз под защитой)!";
-                statusEl.style.color = "#00ff66";
-            } else if (Notification.permission === "denied") {
-                statusEl.textContent = "❌ Статус: Заблокированы. Нажми на замочек 🔒 в адресной строке Chrome, чтобы разрешить их.";
-                statusEl.style.color = "#ff4d4d";
-            } else {
-                statusEl.textContent = "⏳ Статус: Еще не настроены. Нажми кнопку ниже!";
-                statusEl.style.color = "#ffcc00";
-            }
-        }
-
+        /* Переключатель режимов FPS (120 / 60) */
         function toggleFpsMode() {
             const html = document.documentElement;
             const fpsBtn = document.getElementById('fpsToggleBtn');
@@ -1491,6 +1343,7 @@
             }
         }
 
+        /* Логика шлюза GitHub Gist с таймером на 24 часа */
         function openGistGateway() {
             const actionBox = document.getElementById('gatewayActionBox');
             const loadingBox = document.getElementById('gatewayLoading');
@@ -1503,55 +1356,11 @@
                 loadingBox.style.display = 'none';
                 resultBox.style.display = 'block';
                 
-                const duration = 24 * 60 * 60 * 1000;
-                const expireTime = new Date().getTime() + duration;
+                const expireTime = new Date().getTime() + (24 * 60 * 60 * 1000);
                 localStorage.setItem('codevpn_gist_expire', expireTime);
-                warned10Mins = false;
                 
-                startGatewayTimer(expireTime);
                 showToast("🔓 Шлюз GitHub Gist успешно открыт!");
             }, 2000);
-        }
-
-        function startGatewayTimer(expireTime) {
-            const timerDisplay = document.getElementById('gatewayTimer');
-            if (!timerDisplay) return;
-
-            if (countdownInterval) clearInterval(countdownInterval);
-
-            countdownInterval = setInterval(() => {
-                const now = new Date().getTime();
-                const distance = expireTime - now;
-
-                if (distance <= 600000 && distance > 0 && !warned10Mins) {
-                    warned10Mins = true;
-                    if ("Notification" in window && Notification.permission === "granted") {
-                        new Notification("🚨 Внимание, шлюз истекает!", {
-                            body: "Привет! Твой шлюз истекает через 10 минут. Срочно заходи на сайт за новым ключом, иначе останешься без подписки!"
-                        });
-                    }
-                }
-
-                if (distance < 0) {
-                    clearInterval(countdownInterval);
-                    localStorage.removeItem('codevpn_gist_expire');
-                    document.getElementById('gatewayActionBox').style.display = 'block';
-                    document.getElementById('gatewayResult').style.display = 'none';
-                    
-                    if ("Notification" in window && Notification.permission === "granted") {
-                        new Notification("⏳ Шлюз полностью истёк!", {
-                            body: "Твой шлюз обновился. Скорее заходи на сайт за новым миксом ключей!"
-                        });
-                    }
-                    return;
-                }
-
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                timerDisplay.textContent = `⏳ До обновления шлюза: ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            }, 1000);
         }
 
         function checkGistGatewayTimer() {
@@ -1561,7 +1370,6 @@
                 if (now < expireTime) {
                     document.getElementById('gatewayActionBox').style.display = 'none';
                     document.getElementById('gatewayResult').style.display = 'block';
-                    startGatewayTimer(parseInt(expireTime));
                 } else {
                     localStorage.removeItem('codevpn_gist_expire');
                 }
@@ -1570,9 +1378,10 @@
 
         function copyGistLink() {
             const linkInput = document.getElementById('gistLinkInput');
-            copyToClipboard(linkInput.value, "🔗 Вечная ссылка на шлюз Gist скопирована!");
+            copyToClipboard(linkInput.value, "🔗 Ссылка на шлюз Gist скопирована!");
         }
 
+        /* Мониторинг сети */
         function initNetworkMonitor() {
             if (!navigator.onLine) {
                 triggerNetCrash();
@@ -1603,6 +1412,7 @@
             crashScreen.style.display = 'flex';
         }
 
+        /* Обработка кликов по копирайту в футере для вызова Режима разработчика (7 кликов) */
         function handleDevClick() {
             devClickCount++;
             if (devClickCount < 7) {
@@ -1750,3 +1560,10 @@
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
